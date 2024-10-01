@@ -1,4 +1,4 @@
-const readlineSync = require('readline');
+const readlineSync = require('readline-sync');
 const ClienteDAO = require('./ClienteDAO');
 const QuejaDAO = require('./QuejaDAO');
 
