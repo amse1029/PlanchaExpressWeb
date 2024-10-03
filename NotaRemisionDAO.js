@@ -2,6 +2,7 @@ const connection = require('./bd_plancha_express');
 const NotaRemision = require('./dominio/NotaRemision');
 const ClienteDAO = require('./ClienteDAO');  // Para obtener el cliente asociado a la nota
 const ServicioDAO = require('./ServicioDAO');  // Para obtener los servicios asociados
+const Servicio = require('./dominio/Servicio');
 
 class NotaRemisionDAO {
     // Obtener todas las notas de remisión
@@ -84,15 +85,22 @@ class NotaRemisionDAO {
     // Helper para obtener los servicios de una nota de remisión usando Promises
     getServiciosByNota(idNota) {
         return new Promise((resolve, reject) => {
-            const query = 'SELECT * FROM Servicio WHERE id_nota = ?';
+            const query = `
+            SELECT s.descripcion, s.precio, s.cantidad 
+            FROM Servicio s
+            JOIN NotaServicio ns ON s.id_servicio = ns.id_servicio
+            WHERE ns.id_nota = ?`;
+
             connection.query(query, [idNota], (err, rows) => {
                 if (err) reject(err);
 
+                // Crear las instancias de Servicio
                 const servicios = rows.map(row => new Servicio(row.descripcion, row.precio, row.cantidad));
                 resolve(servicios);
             });
         });
     }
+
 }
 
 module.exports = NotaRemisionDAO;

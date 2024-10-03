@@ -3,3 +3,5 @@ class Queja {
         this.mensaje = mensaje;
     }
 }
+
+module.exports = Queja;

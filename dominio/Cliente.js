@@ -1,7 +1,8 @@
 class Cliente {
-    constructor(nombre, apellido, quejas = []) {
+    constructor(nombre, apellido) {
         this.nombre = nombre;
         this.apellido = apellido;
-        this.quejas = quejas;  // Relación con Queja (1 a muchos)
     }
 }
+
+module.exports = Cliente;

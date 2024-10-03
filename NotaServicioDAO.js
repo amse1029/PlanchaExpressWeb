@@ -18,8 +18,8 @@ class NotaServicioDAO {
     }
 
     // Agregar un nuevo registro de nota-servicio
-    addNotaServicio(idNota, idServicio, cantidad, callback) {
-        connection.query('INSERT INTO NotaServicio (id_nota, id_servicio, cantidad) VALUES (?, ?, ?)', [idNota, idServicio, cantidad], (err, result) => {
+    addNotaServicio(idNota, idServicio, callback) {
+        connection.query('INSERT INTO NotaServicio (id_nota, id_servicio) VALUES (?, ?)', [idNota, idServicio], (err, result) => {
             if (err) throw err;
             callback(result.insertId);
         });
