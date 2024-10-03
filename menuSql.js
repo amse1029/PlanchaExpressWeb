@@ -70,15 +70,19 @@ function menu() {
                 agregarNotaServicio();
                 break;
             case '11':
-                rl.question('Reporte Diario, Semanal o Mensual? ', (tipo) => {
-                    const [fechaInicio, fechaFin] = reporteServicios.getFechasReporte(tipo.toLowerCase());
-                    reporteServicios.generarReporteServicios(fechaInicio, fechaFin, menu);
+                rl.question('Filtrar por (diario/semanal/mensual): ', (filtro) => {
+                    reporteServicios.generarReporte(filtro, (reporte) => {
+                        console.log(reporte);
+                        menu();
+                    });
                 });
                 break;
             case '12':
-                rl.question('Reporte Diario, Semanal o Mensual? ', (tipo) => {
-                    const [fechaInicio, fechaFin] = reporteVentas.getFechasReporte(tipo.toLowerCase());
-                    reporteVentas.generarReporteVentas(fechaInicio, fechaFin, menu);
+                rl.question('Filtrar por (diario/semanal/mensual): ', (filtro) => {
+                    reporteVentas.generarReporte(filtro, (reporte) => {
+                        console.log(reporte);
+                        menu();
+                    });
                 });
                 break;
             case '0':
