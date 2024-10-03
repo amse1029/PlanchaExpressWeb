@@ -87,7 +87,7 @@ function menu() {
                 break;
             case '0':
                 rl.close();
-                connection.end();  // Cerrar conexión a la BD
+                reporteVentas.cerrarConexion();
                 break;
             default:
                 console.log('Opción no válida');

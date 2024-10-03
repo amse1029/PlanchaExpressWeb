@@ -42,6 +42,7 @@ Media: ${media.toFixed(2)}, Moda: ${moda}, Mediana: ${mediana}
             } else {
                 callback('No se encontraron ventas para el rango de fechas seleccionado.');
             }
+
         });
     }
 
@@ -87,6 +88,14 @@ Media: ${media.toFixed(2)}, Moda: ${moda}, Mediana: ${mediana}
         const mitad = Math.floor(arr.length / 2);
         return arr.length % 2 === 0 ? (arr[mitad - 1] + arr[mitad]) / 2 : arr[mitad];
     }
+
+    cerrarConexion(){
+        connection.end((err) => {
+            if (err) throw err;
+            console.log('Conexión cerrada');
+        });
+    }
+
 }
 
 module.exports = ReporteVentas;

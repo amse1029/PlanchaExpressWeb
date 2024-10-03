@@ -10,6 +10,7 @@ class QuejaDAO {
             // Convertir cada resultado en una instancia de la clase Queja
             const quejas = rows.map(row => new Queja(row.mensaje));
             callback(quejas);
+
         });
     }
 
@@ -21,6 +22,7 @@ class QuejaDAO {
             // Convertir cada resultado en una instancia de la clase Queja
             const quejas = rows.map(row => new Queja(row.mensaje));
             callback(quejas);
+
         });
     }
 
@@ -29,6 +31,7 @@ class QuejaDAO {
         connection.query('INSERT INTO Queja (mensaje, id_cliente) VALUES (?, ?)', [mensaje, id_cliente], (err, result) => {
             if (err) throw err;
             callback(result.insertId);
+
         });
     }
 
@@ -37,6 +40,7 @@ class QuejaDAO {
         connection.query('DELETE FROM Queja WHERE id_queja = ?', [id_queja], (err) => {
             if (err) throw err;
             callback();
+
         });
     }
 }

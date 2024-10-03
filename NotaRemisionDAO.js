@@ -22,6 +22,7 @@ class NotaRemisionDAO {
             }));
 
             callback(notasRemision);
+
         });
     }
 
@@ -46,6 +47,7 @@ class NotaRemisionDAO {
             } else {
                 callback(null);  // Si no se encuentra la nota
             }
+
         });
     }
 
@@ -54,6 +56,7 @@ class NotaRemisionDAO {
         connection.query('INSERT INTO NotaRemision (id_cliente, fecha_entrega, total) VALUES (?, ?, ?)', [idCliente, fechaEntrega, total], (err, result) => {
             if (err) throw err;
             callback(result.insertId);
+
         });
     }
 
@@ -62,6 +65,7 @@ class NotaRemisionDAO {
         connection.query('DELETE FROM NotaRemision WHERE id_nota = ?', [id], (err) => {
             if (err) throw err;
             callback();
+
         });
     }
 
@@ -70,6 +74,7 @@ class NotaRemisionDAO {
         connection.query('UPDATE NotaRemision SET fecha_entrega = ?, total = ? WHERE id_nota = ?', [fechaEntrega, total, id], (err) => {
             if (err) throw err;
             callback();
+
         });
     }
 
@@ -97,6 +102,7 @@ class NotaRemisionDAO {
                 // Crear las instancias de Servicio
                 const servicios = rows.map(row => new Servicio(row.descripcion, row.precio, row.cantidad));
                 resolve(servicios);
+
             });
         });
     }

@@ -10,6 +10,7 @@ class ServicioDAO {
             // Convertir cada resultado en una instancia de la clase Servicio
             const servicios = rows.map(row => new Servicio(row.descripcion, row.precio, row.cantidad));
             callback(servicios);
+
         });
     }
 
@@ -25,6 +26,7 @@ class ServicioDAO {
             } else {
                 callback(null);  // Si no se encuentra el servicio
             }
+
         });
     }
 
@@ -33,6 +35,7 @@ class ServicioDAO {
         connection.query('INSERT INTO Servicio (descripcion, precio, cantidad) VALUES (?, ?, ?)', [descripcion, precio, cantidad], (err, result) => {
             if (err) throw err;
             callback(result.insertId);
+
         });
     }
 
@@ -41,6 +44,7 @@ class ServicioDAO {
         connection.query('DELETE FROM Servicio WHERE id_servicio = ?', [id], (err) => {
             if (err) throw err;
             callback();
+
         });
     }
 
@@ -49,6 +53,7 @@ class ServicioDAO {
         connection.query('UPDATE Servicio SET descripcion = ?, precio = ?, cantidad = ? WHERE id_servicio = ?', [descripcion, precio, cantidad, id], (err) => {
             if (err) throw err;
             callback();
+
         });
     }
 }

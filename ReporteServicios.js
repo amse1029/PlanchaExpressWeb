@@ -44,6 +44,7 @@ Media: ${media.toFixed(2)}, Moda: ${moda}, Mediana: ${mediana}
             } else {
                 callback('No se encontraron servicios para el rango de fechas seleccionado.');
             }
+
         });
     }
 

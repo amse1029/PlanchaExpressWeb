@@ -6,6 +6,7 @@ class NotaServicioDAO {
         connection.query('SELECT * FROM NotaServicio', (err, rows) => {
             if (err) throw err;
             callback(rows);
+
         });
     }
 
@@ -14,6 +15,7 @@ class NotaServicioDAO {
         connection.query('SELECT * FROM NotaServicio WHERE id_nota_servicio = ?', [id], (err, rows) => {
             if (err) throw err;
             callback(rows[0]);
+
         });
     }
 
@@ -22,6 +24,7 @@ class NotaServicioDAO {
         connection.query('INSERT INTO NotaServicio (id_nota, id_servicio) VALUES (?, ?)', [idNota, idServicio], (err, result) => {
             if (err) throw err;
             callback(result.insertId);
+
         });
     }
 
@@ -30,6 +33,7 @@ class NotaServicioDAO {
         connection.query('DELETE FROM NotaServicio WHERE id_nota_servicio = ?', [id], (err) => {
             if (err) throw err;
             callback();
+
         });
     }
 
@@ -38,6 +42,7 @@ class NotaServicioDAO {
         connection.query('UPDATE NotaServicio SET id_nota = ?, id_servicio = ?, cantidad = ? WHERE id_nota_servicio = ?', [idNota, idServicio, cantidad, id], (err) => {
             if (err) throw err;
             callback();
+
         });
     }
 }

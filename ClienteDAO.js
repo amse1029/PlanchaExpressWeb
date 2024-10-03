@@ -10,6 +10,7 @@ class ClienteDAO {
             // Convertir cada resultado en una instancia de la clase Cliente
             const clientes = rows.map(row => new Cliente(row.nombre, row.apellido));
             callback(clientes);
+
         });
     }
 
@@ -25,6 +26,7 @@ class ClienteDAO {
             } else {
                 callback(null); // Si no se encuentra el cliente
             }
+
         });
     }
 
@@ -33,6 +35,7 @@ class ClienteDAO {
         connection.query('INSERT INTO Cliente (nombre, apellido) VALUES (?, ?)', [nombre, apellido], (err, result) => {
             if (err) throw err;
             callback(result.insertId);
+
         });
     }
 
@@ -41,6 +44,7 @@ class ClienteDAO {
         connection.query('DELETE FROM Cliente WHERE id_cliente = ?', [id], (err) => {
             if (err) throw err;
             callback();
+
         });
     }
 }
