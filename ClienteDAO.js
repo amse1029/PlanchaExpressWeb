@@ -1,11 +1,15 @@
 const connection = require('./bd_plancha_express');
+const Cliente = require('./dominio/Cliente');
 
 class ClienteDAO {
     // Obtener todos los clientes
     getAllClientes(callback) {
         connection.query('SELECT * FROM Cliente', (err, rows) => {
             if (err) throw err;
-            callback(rows);
+
+            // Convertir cada resultado en una instancia de la clase Cliente
+            const clientes = rows.map(row => new Cliente(row.nombre, row.apellido));
+            callback(clientes);
         });
     }
 
@@ -13,7 +17,14 @@ class ClienteDAO {
     getClienteById(id, callback) {
         connection.query('SELECT * FROM Cliente WHERE id_cliente = ?', [id], (err, rows) => {
             if (err) throw err;
-            callback(rows[0]);
+
+            if (rows.length > 0) {
+                // Crear una instancia de Cliente con los datos obtenidos
+                const cliente = new Cliente(rows[0].nombre, rows[0].apellido);
+                callback(cliente);
+            } else {
+                callback(null); // Si no se encuentra el cliente
+            }
         });
     }
 
