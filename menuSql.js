@@ -4,6 +4,8 @@ const NotaRemisionDAO = require('./NotaRemisionDAO');
 const NotaServicioDAO = require('./NotaServicioDAO');
 const ServicioDAO = require('./ServicioDAO');
 const QuejaDAO = require('./QuejaDAO');
+const ReporteServicios = require('./ReporteServicios');
+const ReporteVentas = require('./ReporteVentas');
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -15,6 +17,8 @@ const notaRemisionDAO = new NotaRemisionDAO();
 const notaServicioDAO = new NotaServicioDAO();
 const servicioDAO = new ServicioDAO();
 const quejaDAO = new QuejaDAO();
+const reporteServicios = new ReporteServicios();
+const reporteVentas = new ReporteVentas();
 
 function menu() {
     console.log(`
@@ -28,6 +32,8 @@ function menu() {
 8. Agregar queja
 9. Listar NotaServicio
 10. Agregar NotaServicio
+11. Reporte de Servicios
+12. Reporte de Ventas
 0. Salir
     `);
 
@@ -63,8 +69,21 @@ function menu() {
             case '10':
                 agregarNotaServicio();
                 break;
+            case '11':
+                rl.question('Reporte Diario, Semanal o Mensual? ', (tipo) => {
+                    const [fechaInicio, fechaFin] = reporteServicios.getFechasReporte(tipo.toLowerCase());
+                    reporteServicios.generarReporteServicios(fechaInicio, fechaFin, menu);
+                });
+                break;
+            case '12':
+                rl.question('Reporte Diario, Semanal o Mensual? ', (tipo) => {
+                    const [fechaInicio, fechaFin] = reporteVentas.getFechasReporte(tipo.toLowerCase());
+                    reporteVentas.generarReporteVentas(fechaInicio, fechaFin, menu);
+                });
+                break;
             case '0':
                 rl.close();
+                connection.end();  // Cerrar conexión a la BD
                 break;
             default:
                 console.log('Opción no válida');
@@ -99,12 +118,12 @@ function listarNotas() {
             console.log(`Cliente: ${nota.cliente.nombre} ${nota.cliente.apellido}`);
             console.log(`Fecha de Entrega: ${nota.fecha_entrega}`);
             console.log(`Total: ${nota.total}`);
-            
+
             console.log('Servicios:');
             nota.servicios.forEach(servicio => {
                 console.log(`- Descripción: ${servicio.descripcion}, Precio: ${servicio.precio}, Cantidad: ${servicio.cantidad}`);
             });
-            
+
             console.log('--------------------');  // Separador entre notas
         });
         menu();
@@ -172,10 +191,10 @@ function listarNotaServicio() {
 function agregarNotaServicio() {
     rl.question('ID Nota: ', (idNota) => {
         rl.question('ID Servicio: ', (idServicio) => {
-                notaServicioDAO.addNotaServicio(idNota, idServicio, (id) => {
-                    console.log(`NotaServicio agregada con ID: ${id}`);
-                    menu();
-                });
+            notaServicioDAO.addNotaServicio(idNota, idServicio, (id) => {
+                console.log(`NotaServicio agregada con ID: ${id}`);
+                menu();
+            });
         });
     });
 }
