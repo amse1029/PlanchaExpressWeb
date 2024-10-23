@@ -1,5 +1,5 @@
-const connection = require('./bd_plancha_express');
-const Servicio = require('./dominio/Servicio');
+const connection = require('../bd/bd_plancha_express');
+const Servicio = require('../dominio/Servicio');
 
 class ServicioDAO {
     // Obtener todos los servicios

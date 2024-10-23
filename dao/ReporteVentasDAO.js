@@ -1,12 +1,10 @@
-const connection = require('./bd_plancha_express');
+const connection = require('../bd/bd_plancha_express');
 
-class ReporteServicios {
+class ReporteVentasDAO {
     generarReporte(filtroFecha, callback) {
         let query = `
-            SELECT Servicio.descripcion, Servicio.precio, Servicio.cantidad 
-            FROM Servicio
-            JOIN NotaServicio ON Servicio.id_servicio = NotaServicio.id_servicio
-            JOIN NotaRemision ON NotaServicio.id_nota = NotaRemision.id_nota
+            SELECT NotaRemision.id_nota, NotaRemision.fecha_entrega, NotaRemision.total
+            FROM NotaRemision
             WHERE NotaRemision.fecha_entrega BETWEEN ? AND ?
         `;
         const { fechaInicio, fechaFin } = this.obtenerFechas(filtroFecha);
@@ -16,33 +14,33 @@ class ReporteServicios {
 
             if (rows.length > 0) {
                 // Calcular medidas estadísticas
-                const servicios = rows.map(row => ({
-                    descripcion: row.descripcion,
-                    precio: row.precio,
-                    cantidad: row.cantidad
+                const ventas = rows.map(row => ({
+                    idNota: row.id_nota,
+                    fecha: row.fecha_entrega,
+                    total: row.total
                 }));
 
-                const totalServicios = servicios.reduce((sum, s) => sum + s.cantidad, 0);
-                const masSolicitado = this.obtenerMasSolicitado(servicios);
-                const media = this.calcularMedia(servicios.map(s => s.cantidad));
-                const moda = this.calcularModa(servicios.map(s => s.cantidad));
-                const mediana = this.calcularMediana(servicios.map(s => s.cantidad));
+                const totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
+                const notaMasCara = this.obtenerNotaMasCara(ventas);
+                const media = this.calcularMedia(ventas.map(v => v.total));
+                const moda = this.calcularModa(ventas.map(v => v.total));
+                const mediana = this.calcularMediana(ventas.map(v => v.total));
 
                 const reporte = `
-Reporte de Servicios (${filtroFecha})
+Reporte de Ventas (${filtroFecha})
 Fecha: ${new Date().toLocaleDateString()}
 ----------------------------------------
-| Descripción         | Precio | Cantidad |
+| ID Nota | Fecha        | Total |
 ----------------------------------------
-${servicios.map(s => `| ${s.descripcion.padEnd(20)} | ${s.precio.toFixed(2).padEnd(6)} | ${s.cantidad.toString().padEnd(8)} |`).join('\n')}
+${ventas.map(v => `| ${v.idNota.toString().padEnd(8)} | ${v.fecha.toISOString().slice(0, 10).padEnd(12)} | ${v.total.toFixed(2).padEnd(5)} |`).join('\n')}
 ----------------------------------------
-Total Servicios: ${totalServicios}
-Servicio más solicitado: ${masSolicitado.descripcion} (${masSolicitado.cantidad} veces)
+Total Ventas: ${totalVentas.toFixed(2)}
+Nota más cara: ID ${notaMasCara.idNota} (${notaMasCara.total} unidades)
 Media: ${media.toFixed(2)}, Moda: ${moda}, Mediana: ${mediana}
                 `;
                 callback(reporte);
             } else {
-                callback('No se encontraron servicios para el rango de fechas seleccionado.');
+                callback('No se encontraron ventas para el rango de fechas seleccionado.');
             }
 
         });
@@ -69,14 +67,8 @@ Media: ${media.toFixed(2)}, Moda: ${moda}, Mediana: ${mediana}
         return { fechaInicio, fechaFin };
     }
 
-    obtenerMasSolicitado(servicios) {
-        const conteo = servicios.reduce((acc, s) => {
-            acc[s.descripcion] = (acc[s.descripcion] || 0) + s.cantidad;
-            return acc;
-        }, {});
-
-        const descripcionMasSolicitada = Object.keys(conteo).reduce((a, b) => conteo[a] > conteo[b] ? a : b);
-        return { descripcion: descripcionMasSolicitada, cantidad: conteo[descripcionMasSolicitada] };
+    obtenerNotaMasCara(ventas) {
+        return ventas.reduce((a, b) => (a.total > b.total) ? a : b);
     }
 
     calcularMedia(arr) {
@@ -96,6 +88,14 @@ Media: ${media.toFixed(2)}, Moda: ${moda}, Mediana: ${mediana}
         const mitad = Math.floor(arr.length / 2);
         return arr.length % 2 === 0 ? (arr[mitad - 1] + arr[mitad]) / 2 : arr[mitad];
     }
+
+    cerrarConexion(){
+        connection.end((err) => {
+            if (err) throw err;
+            console.log('Conexión cerrada');
+        });
+    }
+
 }
 
-module.exports = ReporteServicios;
+module.exports = ReporteVentasDAO;

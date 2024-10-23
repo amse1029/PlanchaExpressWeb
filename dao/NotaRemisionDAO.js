@@ -1,8 +1,8 @@
-const connection = require('./bd_plancha_express');
-const NotaRemision = require('./dominio/NotaRemision');
-const ClienteDAO = require('./ClienteDAO');  // Para obtener el cliente asociado a la nota
-const ServicioDAO = require('./ServicioDAO');  // Para obtener los servicios asociados
-const Servicio = require('./dominio/Servicio');
+const connection = require('../bd/bd_plancha_express');
+const NotaRemision = require('../dominio/NotaRemision');
+const ClienteDAO = require('../dao/ClienteDAO');  // Para obtener el cliente asociado a la nota
+const ServicioDAO = require('../dao/ServicioDAO');  // Para obtener los servicios asociados
+const Servicio = require('../dominio/Servicio');
 
 class NotaRemisionDAO {
     // Obtener todas las notas de remisión

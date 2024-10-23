@@ -4,8 +4,8 @@ const NotaRemisionDAO = require('./NotaRemisionDAO');
 const NotaServicioDAO = require('./NotaServicioDAO');
 const ServicioDAO = require('./ServicioDAO');
 const QuejaDAO = require('./QuejaDAO');
-const ReporteServicios = require('./ReporteServicios');
-const ReporteVentas = require('./ReporteVentas');
+const ReporteServicios = require('./dao/ReporteServiciosDAO');
+const ReporteVentas = require('./dao/ReporteVentasDAO');
 
 const rl = readline.createInterface({
     input: process.stdin,

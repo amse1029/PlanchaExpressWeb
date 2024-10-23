@@ -1,4 +1,4 @@
-const connection = require('./bd_plancha_express');
+const connection = require('../bd/bd_plancha_express');
 
 class NotaServicioDAO {
     // Obtener todos los registros de nota-servicio

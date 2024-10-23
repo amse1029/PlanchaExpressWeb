@@ -1,4 +1,4 @@
-const Reporte = require('./Reporte');
+const Reporte = require('./Reporte'); // Asegúrate de usar la ruta correcta
 
 class ReporteServicios extends Reporte {
     constructor(fecha, servicios) {

@@ -1,5 +1,5 @@
-const connection = require('./bd_plancha_express');
-const Cliente = require('./dominio/Cliente');
+const connection = require('../bd/bd_plancha_express');
+const Cliente = require('../dominio/Cliente');
 
 class ClienteDAO {
     // Obtener todos los clientes

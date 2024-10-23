@@ -1,5 +1,5 @@
-const connection = require('./bd_plancha_express');
-const Queja = require('./dominio/Queja');
+const connection = require('../bd/bd_plancha_express');
+const Queja = require('../dominio/Queja');
 
 class QuejaDAO {
     // Obtener todas las quejas
