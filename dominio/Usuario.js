@@ -4,3 +4,5 @@ class Usuario {
         this.pass = pass;
     }
 }
+
+module.exports = Usuario;

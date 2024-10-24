@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-require('dotenv').config(); // Para cargar las variables de entorno
+require('dotenv').config(); //Cargar variables de entorno
 
 // Importa las rutas
 const clienteRoutes = require('./routes/clienteRoutes');
+const usuarioRoutes = require('./routes/usuarioRoutes');
 const notaRemisionRoutes = require('./routes/notaRemisionRoutes');
 const notaServicioRoutes = require('./routes/notaServicioRoutes');
 const servicioRoutes = require('./routes/servicioRoutes');
@@ -13,13 +14,14 @@ const loginRoutes = require('./routes/authRoutes'); // Ruta de login
 const protectedRoutes = require('./routes/protectedRoutes'); // Ruta protegida
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;  // Usa el puerto definido en .env o el 3000 por defecto
 
 // Middleware para parsear JSON
 app.use(bodyParser.json());
 
 // Monta las rutas
 app.use('/api/v1/clientes', clienteRoutes);
+app.use('/api/v1/usuarios', usuarioRoutes);
 app.use('/api/v1/notas-remision', notaRemisionRoutes);
 app.use('/api/v1/notas-servicio', notaServicioRoutes);
 app.use('/api/v1/servicios', servicioRoutes);

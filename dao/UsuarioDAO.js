@@ -13,19 +13,22 @@ class UsuarioDAO {
         });
     }
 
-    getUsuarioByUsername(username, callback) {
-        connection.query('SELECT * FROM Usuario WHERE usuario = ?', [username], (err, rows) => {
-            if (err) throw err;
-
-            if (rows.length > 0) {
-                // Crear una instancia de Usuario con los datos obtenidos
-                const usuario = new Usuario(rows[0].usuario, rows[0].pass);
-                callback(usuario);
-            } else {
-                callback(null); // Si no se encuentra el usuario
-            }
+    getUsuarioByUsername(username) {
+        return new Promise((resolve, reject) => {
+            connection.query('SELECT * FROM Usuario WHERE usuario = ?', [username], (err, rows) => {
+                if (err) return reject(err);
+    
+                if (rows.length > 0) {
+                    // Crear una instancia de Usuario con los datos obtenidos
+                    const usuario = new Usuario(rows[0].usuario, rows[0].pass);
+                    resolve(usuario);
+                } else {
+                    resolve(null); // Si no se encuentra el usuario
+                }
+            });
         });
     }
+    
 
     // Obtener un usuario por su ID
     getUsuarioById(id, callback) {
