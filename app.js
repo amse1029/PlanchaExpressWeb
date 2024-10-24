@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+require('dotenv').config(); // Para cargar las variables de entorno
 
 // Importa las rutas
 const clienteRoutes = require('./routes/clienteRoutes');
@@ -8,6 +9,8 @@ const notaServicioRoutes = require('./routes/notaServicioRoutes');
 const servicioRoutes = require('./routes/servicioRoutes');
 const quejaRoutes = require('./routes/quejaRoutes');
 const reporteRoutes = require('./routes/reporteRoutes');
+const loginRoutes = require('./routes/authRoutes'); // Ruta de login
+const protectedRoutes = require('./routes/protectedRoutes'); // Ruta protegida
 
 const app = express();
 const port = 3000;
@@ -22,6 +25,10 @@ app.use('/api/v1/notas-servicio', notaServicioRoutes);
 app.use('/api/v1/servicios', servicioRoutes);
 app.use('/api/v1/quejas', quejaRoutes);
 app.use('/api/v1/reportes', reporteRoutes);
+
+// Rutas de autenticación y protección
+app.use('/auth', loginRoutes); // Ruta de autenticación
+app.use('/protected', protectedRoutes); // Ruta protegida con JWT
 
 // Middleware de manejo de errores
 app.use((err, req, res, next) => {

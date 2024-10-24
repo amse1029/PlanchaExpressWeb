@@ -34,6 +34,7 @@ function menu() {
 10. Agregar NotaServicio
 11. Reporte de Servicios
 12. Reporte de Ventas
+13. Registrar usuario
 0. Salir
     `);
 
@@ -84,6 +85,9 @@ function menu() {
                         menu();
                     });
                 });
+                break;
+                case '13': 
+                registrarUsuario(); // Llamar a la nueva función
                 break;
             case '0':
                 rl.close();
@@ -198,6 +202,17 @@ function agregarNotaServicio() {
             notaServicioDAO.addNotaServicio(idNota, idServicio, (id) => {
                 console.log(`NotaServicio agregada con ID: ${id}`);
                 menu();
+            });
+        });
+    });
+}
+
+function registrarUsuario() {
+    rl.question('Nombre de usuario: ', (usuario) => {
+        rl.question('Contraseña: ', (password) => {
+            usuarioDAO.addUsuario(usuario, password, (id) => {
+                console.log(`Usuario registrado con ID: ${id}`);
+                menu(); // Volver al menú principal
             });
         });
     });
