@@ -1,0 +1,56 @@
+/* Estilo general para la navbar */
+.navbar {
+  height: 60px; /* Altura fija del navbar */
+  display: flex;
+  align-items: center; /* Centra verticalmente los elementos */
+  padding: 0 20px; /* Espaciado interno */
+  background-color: #FFFFFF;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+  
+  /* Estilos para los elementos de la navbar */
+  .navbar .navbar-brand {
+    font-size: 1.5rem; /* Tamaño del logo o nombre de la marca */
+    font-weight: bold;
+    color: #05C7F2; /* Color principal de la marca */
+  }
+  
+  .navbar .navbar-nav .nav-link {
+    color: #05C7F2; /* Color de los enlaces */
+    font-weight: 500;
+    margin-right: 15px;
+    transition: color 0.3s ease; /* Transición de color en hover */
+  }
+  
+  .navbar .navbar-nav .nav-link:hover {
+    color: #0056b3; /* Color en hover */
+  }
+  
+  /* Ajustes para dispositivos pequeños */
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px;
+    }
+    .navbar .navbar-brand {
+      font-size: 1.3rem;
+    }
+    .navbar .navbar-nav .nav-link {
+      margin-right: 10px;
+    }
+  }
+
+  .navbar-brand {
+    display: flex;
+    align-items: center; /* Centra el logo verticalmente */
+    justify-content: center; /* Centra el logo horizontalmente */
+    height: 100%; /* Asegura que el contenedor del logo ocupe todo el espacio disponible en el navbar */
+  }
+  
+  .navbar-brand img {
+    height: auto; /* Mantener la proporción */
+    max-height: 50px; /* Altura máxima */
+    width: auto; /* Mantener la proporción de la imagen */
+    display: block; /* Elimina el espacio extra que podría generar la imagen */
+  }
+  
