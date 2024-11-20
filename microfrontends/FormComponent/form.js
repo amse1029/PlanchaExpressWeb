@@ -1,40 +1,52 @@
 class FormInfo extends HTMLElement {
-	constructor() {
-		super();
-	}
+    constructor() {
+        super();
+    }
 
-	connectedCallback() {
-		const shadow = this.attachShadow({ mode: "open" });
-		this.#agregaEstilo(shadow);
-		this.#render(shadow);
-	}
+    connectedCallback() {
+        const shadow = this.attachShadow({ mode: "open" });
+        this.#agregaEstilo(shadow);
+        this.#render(shadow);
+    }
 
-	#render(shadow) {
-		shadow.innerHTML = `
-			<form class="registration-form" action="http://localhost:3000/api/v1/clientes" method="POST">
-				<h2>Formulario de Registro</h2>
-				
-				<label for="nombre">Nombre</label>
-				<input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre" required>
+    #render(shadow) {
+        shadow.innerHTML = `
+        <div class="form-container">
+            <form class="registration-form" action="http://localhost:3000/api/v1/clientes" method="POST">
+                <h2>Formulario de Registro</h2>
+                
+                <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre" required>
+                </div>
 
-				<label for="apellido">Apellido</label>
-				<input type="text" id="apellido" name="apellido" placeholder="Escribe tu apellido" required>
+                <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" name="apellido" placeholder="Escribe tu apellido" required>
+                </div>
 
-				<label for="email">Correo Electrónico</label>
-				<input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+                <div class="form-group">
+                <label for="email">Correo Electrónico</label>
+                <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+                </div>
 
-				<label for="password">Contraseña</label>
-				<input type="password" id="password" name="password" placeholder="Escribe tu contraseña" required>
+                <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="Escribe tu contraseña" required>
+                </div>
 
-				<label for="confirm-password">Repetir Contraseña</label>
-				<input type="password" id="confirm-password" name="confirm_password" placeholder="Repite tu contraseña" required>
+                <div class="form-group">
+                <label for="confirm-password">Repetir Contraseña</label>
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Repite tu contraseña" required>
+                </div>
 
-				<button type="submit">Registrar</button>
-			</form>
-		`;
-	}
+                <button type="submit">Registrar</button>
+            </form>
+        </div>
+        `;
+    }
 
-	#agregaEstilo(shadow) {
+    #agregaEstilo(shadow) {
 		let link = document.createElement("link");
 		link.setAttribute("rel", "stylesheet");
 		link.setAttribute("href", "./FormComponent/css/form.css"); // Ruta a tu archivo CSS
