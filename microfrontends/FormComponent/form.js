@@ -11,14 +11,14 @@ class FormInfo extends HTMLElement {
 
 	#render(shadow) {
 		shadow.innerHTML = `
-			<form class="registration-form" action="/register" method="POST">
+			<form class="registration-form" action="http://localhost:3000/api/v1/clientes" method="POST">
 				<h2>Formulario de Registro</h2>
 				
-				<label for="first-name">Nombre</label>
-				<input type="text" id="first-name" name="first_name" placeholder="Escribe tu nombre" required>
+				<label for="nombre">Nombre</label>
+				<input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre" required>
 
-				<label for="last-name">Apellido</label>
-				<input type="text" id="last-name" name="last_name" placeholder="Escribe tu apellido" required>
+				<label for="apellido">Apellido</label>
+				<input type="text" id="apellido" name="apellido" placeholder="Escribe tu apellido" required>
 
 				<label for="email">Correo Electrónico</label>
 				<input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>

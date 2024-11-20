@@ -6,27 +6,79 @@ http://www.free-css-templates.com
 
 */
 
+/* Estilo global */
 body { 
-	margin:5px 0; 
-	padding:0; 
+	margin: 0; 
+	padding: 0; 
 	font: 100% Arial, Sans-Serif; 
-	color:#FFF;  
-	background-color:#eee;
+	color: #FFF;  
+	background-color: #eee;
 	line-height: 1.4em; 
-	background : #05C7F2;
+	background: #05C7F2;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Barra superior (navbar) */
+.toph { 
+	background: #FFFFFF; 
+	height: 100px; 
+	width: 100%; 
+	position: fixed; /* Fija la barra en la parte superior */
+	top: 0; /* Alinea al top */
+	left: 0; /* Alinea al lado izquierdo */
+	z-index: 1000; /* Asegura que la barra se superponga a otros elementos */
 }
 
 .center { 
 	width: 530px; 
 	font-size: 95%; 
-	margin: 0px 0 5px 35px !important;
-	margin: 0px 0 5px 20px; 
+	margin: 110px 0 5px 20px; /* Añade espacio arriba para la barra */
 	padding: 0; 
 	background: #3D3E42; 
 	color: #FFF;
 }
 
-.toph { background: #FFFFFF; height: 100px; margin:0; padding:0; }
+main {
+    margin-top: 110px; /* Añade espacio para la barra de navegación fija */
+}
+
+h1 {
+    padding: 0;
+    margin: 0;
+    color: #FFF;
+    background: inherit;
+    font: bold 1.8em Arial, Sans-Serif;
+    letter-spacing: -1px;
+}
+
+/* Estilo de la barra de navegación */
+.nav { 
+    clear: both; 
+    text-align: left; 
+    color: #7D8085; 
+    padding: 5px 0 0 0; 
+}
+
+.nav li { 
+    font-weight: bold; 
+    margin: 0 0 8px 0; 
+    padding: 0 0 0 5px; 
+    border-bottom: 1px solid #F29900; 
+}
+
+.nav li a { 
+    color: #7D8085; 
+}
+
+.nav li a:hover { 
+    color: #F29900; 
+    text-decoration: none; 
+}
 
 .content { 
     color: #a0a0a0; 

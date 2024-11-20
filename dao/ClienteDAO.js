@@ -8,9 +8,8 @@ class ClienteDAO {
             if (err) throw err;
 
             // Convertir cada resultado en una instancia de la clase Cliente
-            const clientes = rows.map(row => new Cliente(row.nombre, row.apellido));
+            const clientes = rows.map(row => new Cliente(row.nombre, row.apellido, row.email, row.password));
             callback(clientes);
-
         });
     }
 
@@ -21,21 +20,19 @@ class ClienteDAO {
 
             if (rows.length > 0) {
                 // Crear una instancia de Cliente con los datos obtenidos
-                const cliente = new Cliente(rows[0].nombre, rows[0].apellido);
+                const cliente = new Cliente(rows[0].nombre, rows[0].apellido, rows[0].email, rows[0].password);
                 callback(cliente);
             } else {
                 callback(null); // Si no se encuentra el cliente
             }
-
         });
     }
 
     // Agregar un nuevo cliente
-    addCliente(nombre, apellido, callback) {
-        connection.query('INSERT INTO Cliente (nombre, apellido) VALUES (?, ?)', [nombre, apellido], (err, result) => {
+    addCliente(nombre, apellido, email, password, callback) {
+        connection.query('INSERT INTO Cliente (nombre, apellido, email, password) VALUES (?, ?, ?, ?)', [nombre, apellido, email, password], (err, result) => {
             if (err) throw err;
-            callback(result.insertId);
-
+            callback(result.insertId); // Devuelve el ID del cliente agregado
         });
     }
 
@@ -44,7 +41,6 @@ class ClienteDAO {
         connection.query('DELETE FROM Cliente WHERE id_cliente = ?', [id], (err) => {
             if (err) throw err;
             callback();
-
         });
     }
 }

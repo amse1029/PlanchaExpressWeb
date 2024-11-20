@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 require('dotenv').config(); //Cargar variables de entorno
 
 // Importa las rutas
@@ -17,7 +16,10 @@ const app = express();
 const port = process.env.PORT || 3000;  // Usa el puerto definido en .env o el 3000 por defecto
 
 // Middleware para parsear JSON
-app.use(bodyParser.json());
+app.use(express.json());  // Para parsear cuerpos JSON
+
+// Middleware para parsear datos URL encoded (como los formularios HTML)
+app.use(express.urlencoded({ extended: true }));  // Para formularios URL encoded
 
 // Monta las rutas
 app.use('/api/v1/clientes', clienteRoutes);

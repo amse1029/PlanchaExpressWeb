@@ -11,18 +11,18 @@ class Navbar extends HTMLElement {
   
 	#render(shadow) {
 	  shadow.innerHTML = `
-	  <nav class="navbar">
-		<a href="#" class="navbar-brand">
-		  <img src="./img/logo.jpg" alt="PlanchaExpress Logo" class="navbar-logo">
-		</a>
-		<div class="navbar-nav">
-		  <a href="#" class="nav-link">Iniciar sesión |</a>
-		  <a href="#" class="nav-link">Registrarse |</a>
-		  <a href="#" class="nav-link">Consultar nota de remisión |</a>
-		  <a href="#" class="nav-link">Registrar queja |</a>
-		  <a href="#" class="nav-link">Contacto |</a>
-		</div>
-	  </nav>
+		<nav class="navbar">
+		  <div class="navbar-nav">
+			<a href="index.html" class="navbar-brand">
+			  <img src="./img/logo.jpg" alt="PlanchaExpress Logo" width="120" height="100">
+			</a>
+			<a href="#" class="nav-link">Iniciar sesion</a>
+			<a href="#" class="nav-link">Registrarse</a>
+			<a href="#" class="nav-link">Consultar nota de remision</a>
+			<a href="#" class="nav-link">Registrar queja</a>
+			<a href="#" class="nav-link">Contacto</a>
+		  </div>
+		</nav>
 	  `;
 	}
   
