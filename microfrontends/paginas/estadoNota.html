@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado de Nota</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script defer src="../NavBarComponent/navbar.js"></script>
+</head>
+<body>
+    <div class="form-container">
+        <h2 id="nota-titulo">Nota de remisión:</h2>
+        <form>
+            <label for="cliente">Cliente:</label>
+            <input type="text" id="cliente" disabled>
+
+            <label for="fecha">Fecha:</label>
+            <input type="text" id="fecha" disabled>
+
+            <label for="total">Total:</label>
+            <input type="text" id="total" disabled>
+
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" disabled>
+
+            <label for="servicios">Servicios:</label>
+            <textarea id="servicios" disabled></textarea>
+        </form>
+        <button id="btn-regresar">Regresar</button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+
+            const folio = params.get("folio");
+            const cliente = params.get("cliente");
+            const fecha = params.get("fecha");
+            const total = params.get("total");
+            const estado = params.get("estado");
+            const servicios = params.get("servicios");
+
+            document.getElementById("nota-titulo").textContent = `Nota de remisión: ${folio}`;
+            document.getElementById("cliente").value = cliente || "No disponible";
+            document.getElementById("fecha").value = fecha || "No disponible";
+            document.getElementById("total").value = total || "No disponible";
+            document.getElementById("estado").value = estado || "No disponible";
+            document.getElementById("servicios").value = servicios || "No disponible";
+
+            document.getElementById("btn-regresar").addEventListener("click", () => {
+                window.location.href = "./consultarNota.html";
+            });
+        });
+    </script>
+</body>
+</html>
+

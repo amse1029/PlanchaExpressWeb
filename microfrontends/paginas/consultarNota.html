@@ -11,15 +11,44 @@
     <!-- Form -->
     <div class="form-container">
         <h2>Consultar Nota</h2>
-        <form action="http://localhost:3000/api/v1/notas-remision" method="GET">
+        <form id="consulta-form">
             <label for="folio">Folio:</label>
             <input type="text" id="folio" name="folio" placeholder="Ingresa el folio" required>
 
             <label for="fecha">Fecha:</label>
             <input type="date" id="fecha" name="fecha" required>
 
-            <button type="submit">Buscar</button>
+            <button type="button" id="buscar-btn">Buscar</button>
         </form>
     </div>
+
+    <script>
+        document.getElementById("buscar-btn").addEventListener("click", async () => {
+            const folio = document.getElementById("folio").value;
+            const fecha = document.getElementById("fecha").value;
+
+            if (!folio || !fecha) {
+                alert("Por favor, completa todos los campos.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3000/api/v1/notas-remision?folio=${folio}&fecha=${fecha}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Redirige a la pantalla de estadoNota con los datos
+                    const params = new URLSearchParams(data).toString();
+                    window.location.href = `estadoNota.html?${params}`;
+                } else {
+                    alert(data.message || "Error al consultar la nota.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("No se pudo conectar con el servidor.");
+            }
+        });
+    </script>
 </body>
 </html>
+
