@@ -1,9 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Principal</title>
-        <link rel="stylesheet" href="../css/estilos.css">
-        <script defer src="../NavBarComponent/navbar.js"></script>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script defer src="../NavBarComponent/navbar.js"></script>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Bienvenido a PlanchaExpress</h1>
+            <p>Tu solución confiable para el lavado, planchado y secado de tus prendas. ¡Déjanos simplificar tu vida!</p>
+            <button onclick="window.location.href='../Paginas/registroClientes.html'">Regístrate Ahora</button>
+        </div>
+    </section>
+
+    <!-- Servicios Section -->
+    <section class="services-section">
+        <h2>Nuestros Servicios</h2>
+        <div class="services-container">
+            <div class="service-card">
+                <h3>Lavado</h3>
+                <p>Mantenemos tus prendas impecables con nuestro lavado profesional.</p>
+            </div>
+            <div class="service-card">
+                <h3>Planchado</h3>
+                <p>Plancha perfecta para todas tus prendas, desde camisas hasta vestidos de gala.</p>
+            </div>
+            <div class="service-card">
+                <h3>Secado</h3>
+                <p>Secado eficiente y seguro para cualquier tipo de tejido.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios Section -->
+    <section class="testimonials-section">
+        <h2>Lo Que Dicen Nuestros Clientes</h2>
+        <div class="testimonials-container">
+            <blockquote>
+                <p>"Un servicio excelente. Mi vestido de bodas quedó impecable."</p>
+                <footer>- María López</footer>
+            </blockquote>
+            <blockquote>
+                <p>"La rapidez y calidad de PlanchaExpress son inigualables."</p>
+                <footer>- Juan Pérez</footer>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Ubicación Section -->
+    <section class="location-section">
+        <h2>Visítanos</h2>
+        <p>Estamos ubicados en Matamoros y Galeana N° 35, Avenida Juárez, Colonia Centro, Huatabampo, Sonora.</p>
+        <!-- Puedes descomentar esta parte si decides implementar Google Maps en el futuro -->
+        <!-- <div id="map"></div> -->
+    </section>
+
+    <!-- Llamado a la Acción Section -->
+    <section class="cta-section">
+        <h2>¿Listo para una experiencia sin igual?</h2>
+        <p>Regístrate ahora y disfruta de un servicio confiable y de calidad.</p>
+        <button onclick="window.location.href='../Paginas/registroClientes.html'">Comenzar</button>
+    </section>
+</body>
+</html>
