@@ -10,11 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const navbar = document.createElement('div');
     navbar.className = 'navbar';
     navbar.innerHTML = `
-        <a href="../index.html"><img src="../img/logo.jpg" alt="Logo"></a>
+        <a href="../Paginas/index.html"><img src="../img/logo.jpg" alt="Logo"></a>
         <a href="../Paginas/inicioSesion.html">Iniciar Sesión</a>
         <a href="../Paginas/registroClientes.html">Registrarse</a>
         <a href="../Paginas/notas.html">Consultar Nota de Remisión</a>
-        <a href="../Paginas/registroQuejas.html">Registrar Queja</a>
+        <a href="../Paginas/registroQueja.html">Registrar Queja</a>
         <a href="../Paginas/contacto.html">Contacto</a>
     `;
 
