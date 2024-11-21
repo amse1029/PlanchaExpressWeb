@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido de Nuevo</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script defer src="../NavBarComponent/navbar.js"></script>
+    <script>
+        // Recuperar el nombre del usuario desde el token (decodificarlo si contiene el nombre)
+        const token = localStorage.getItem('jwtToken');
+
+        if (!token) {
+            // Si no hay token, redirigir al login
+            window.location.href = 'inicioSesion.html';
+        } else {
+            // Simular un usuario recuperado
+            const userName = 'Juan Pérez'; // Esto debería venir del token decodificado o del backend
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('userName').textContent = userName;
+            });
+        }
+
+        // Función para cerrar sesión
+        function cerrarSesion() {
+            localStorage.removeItem('jwtToken');
+            alert('Sesión cerrada.');
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <!-- Ubicación Section -->
+    <section class="location-section">
+        <h2>Visítanos</h2>
+        <p>Estamos ubicados en Matamoros y Galeana N° 35, Avenida Juárez, Colonia Centro, Huatabampo, Sonora.</p>
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.446825344057!2d-109.6405104!3d26.825737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86b78b31edbdf05f%3A0xe695f85f1109950c!2sLavander%C3%ADa%20Plancha%20Express!5e0!3m2!1ses!2smx!4v1732167889010!5m2!1ses!2smx"
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
+</body>
+</html>
