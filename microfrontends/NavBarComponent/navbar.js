@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <a href="../Paginas/index.html"><img src="../img/logo.jpg" alt="Logo"></a>
         <a href="../Paginas/inicioSesion.html">Iniciar Sesión</a>
         <a href="../Paginas/registroClientes.html">Registrarse</a>
-        <a href="../Paginas/notas.html">Consultar Nota de Remisión</a>
-        <a href="../Paginas/registroQueja.html">Registrar Queja</a>
+        <a href="../Paginas/consultarNota.html">Consultar Nota de Remisión</a>
+        <a href="../Paginas/registrarQueja.html">Registrar Queja</a>
         <a href="../Paginas/contacto.html">Contacto</a>
     `;
 

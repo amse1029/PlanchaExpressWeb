@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Nota de Remisión</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script defer src="../NavBarComponent/navbar.js"></script>
+</head>
+<body>
+    <!-- Form -->
+    <div class="form-container">
+        <h2>Consultar Nota</h2>
+        <form action="http://localhost:3000/api/v1/notas-remision" method="GET">
+            <label for="folio">Folio:</label>
+            <input type="text" id="folio" name="folio" placeholder="Ingresa el folio" required>
+
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required>
+
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+</body>
+</html>
