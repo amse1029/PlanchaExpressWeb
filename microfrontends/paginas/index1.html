@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido de Nuevo</title>
     <link rel="stylesheet" href="../css/estilos.css">
-    <script defer src="../NavBarComponent/navbar2.js"></script>
+    <script defer src="../NavBarComponent/navbar1.js"></script>
     <script>
         // Decodificar el token JWT
         function parseJwt(token) {
@@ -40,12 +40,12 @@
             }
 
             // Validar rol del usuario
-            if (decodedToken.role === "client") {
+            if (decodedToken.role === "admin") {
                 // Redirigir al panel de administración si el rol es administrador
-                alert('Esta página es solo para administradores. Redirigiendo...');
-                window.location.href = 'index1.html';
+                alert('Esta página es solo para clientes. Redirigiendo...');
+                window.location.href = 'index2.html';
                 return;
-            } else if (decodedToken.role !== "admin") {
+            } else if (decodedToken.role !== "client") {
                 // Si el rol no es cliente, redirigir al inicio de sesión
                 alert('Rol desconocido. Por favor, inicia sesión nuevamente.');
                 localStorage.removeItem('jwtToken');
@@ -66,6 +66,15 @@
     </script>
 </head>
 <body>
+    <header>
+        <h1>Bienvenido de nuevo, <span id="userName">...</span></h1>
+    </header>
+
+    <!-- Contenido principal -->
+    <section>
+        <p>¡Nos alegra verte de nuevo! Explora las opciones disponibles en el sitio.</p>
+    </section>
+
     <!-- Ubicación Section -->
     <section class="location-section">
         <h2>Visítanos</h2>
@@ -79,5 +88,7 @@
             </iframe>
         </div>
     </section>
+
+    <button onclick="cerrarSesion()">Cerrar Sesión</button>
 </body>
 </html>

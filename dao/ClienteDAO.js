@@ -20,7 +20,7 @@ class ClienteDAO {
 
             if (rows.length > 0) {
                 // Crear una instancia de Cliente con los datos obtenidos
-                const cliente = new Cliente(rows[0].nombre, rows[0].apellido, rows[0].email, rows[0].password);
+                const cliente = new Cliente(rows[0].nombre, rows[0].apellido, rows[0].email, rows[0].password, rows[0].id_cliente);
                 callback(cliente);
             } else {
                 callback(null); // Si no se encuentra el cliente
@@ -30,7 +30,7 @@ class ClienteDAO {
 
     // Agregar un nuevo cliente
     addCliente(nombre, apellido, email, password, callback) {
-        connection.query('INSERT INTO Cliente (nombre, apellido, email, password) VALUES (?, ?, ?, ?)', [nombre, apellido, email, password], (err, result) => {
+        connection.query('INSERT INTO Cliente (nombre, apellido, email, pass) VALUES (?, ?, ?, ?)', [nombre, apellido, email, password], (err, result) => {
             if (err) throw err;
             callback(result.insertId); // Devuelve el ID del cliente agregado
         });

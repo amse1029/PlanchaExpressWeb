@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido de Nuevo</title>
+    <title>Reporte de Servicios</title>
     <link rel="stylesheet" href="../css/estilos.css">
     <script defer src="../NavBarComponent/navbar2.js"></script>
     <script>
@@ -21,10 +21,10 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        // Función para obtener el reporte de servicios
+        function obtenerReporte(filtroFecha) {
             const token = localStorage.getItem('jwtToken');
             if (!token) {
-                // Si no hay token, redirigir al login
                 window.location.href = 'inicioSesion.html';
                 return;
             }
@@ -32,7 +32,6 @@
             // Decodificar el token
             const decodedToken = parseJwt(token);
             if (!decodedToken) {
-                // Token inválido o expirado
                 alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
                 localStorage.removeItem('jwtToken');
                 window.location.href = 'inicioSesion.html';
@@ -40,21 +39,27 @@
             }
 
             // Validar rol del usuario
-            if (decodedToken.role === "client") {
-                // Redirigir al panel de administración si el rol es administrador
+            if (decodedToken.role !== "admin") {
                 alert('Esta página es solo para administradores. Redirigiendo...');
                 window.location.href = 'index1.html';
                 return;
-            } else if (decodedToken.role !== "admin") {
-                // Si el rol no es cliente, redirigir al inicio de sesión
-                alert('Rol desconocido. Por favor, inicia sesión nuevamente.');
-                localStorage.removeItem('jwtToken');
-                window.location.href = 'inicioSesion.html';
-                return;
             }
 
-            // Mostrar el nombre del usuario en la página (campo opcional)
-            document.getElementById('userName').textContent = decodedToken.nombre || 'Usuario desconocido';
+            // Realizar la solicitud al servidor para obtener el reporte
+            fetch(`http://localhost:3000/api/v1/reportes/servicios/${filtroFecha}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('reporte').textContent = data;
+                })
+                .catch(error => {
+                    console.error('Error al obtener el reporte:', error);
+                    alert('Error al obtener el reporte de servicios.');
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Al cargar la página, generar el reporte diario por defecto
+            obtenerReporte('diario');
         });
 
         // Función para cerrar sesión
@@ -66,18 +71,20 @@
     </script>
 </head>
 <body>
-    <!-- Ubicación Section -->
-    <section class="location-section">
-        <h2>Visítanos</h2>
-        <p>Estamos ubicados en Matamoros y Galeana N° 35, Avenida Juárez, Colonia Centro, Huatabampo, Sonora.</p>
-        <div class="map-container">
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.446825344057!2d-109.6405104!3d26.825737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86b78b31edbdf05f%3A0xe695f85f1109950c!2sLavander%C3%ADa%20Plancha%20Express!5e0!3m2!1ses!2smx!4v1732167889010!5m2!1ses!2smx"
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+    <div class="container">
+        <h1>Reporte de Servicios</h1>
+
+        <div class="filtros">
+            <h3>Filtrar por Fecha:</h3>
+            <button onclick="obtenerReporte('diario')">Diario</button>
+            <button onclick="obtenerReporte('semanal')">Semanal</button>
+            <button onclick="obtenerReporte('mensual')">Mensual</button>
         </div>
-    </section>
+
+        <div id="reporte" class="reporte">
+            <!-- Aquí se mostrará el reporte generado por el servidor -->
+        </div>
+    </div>
+
 </body>
 </html>

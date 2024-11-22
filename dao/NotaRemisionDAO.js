@@ -42,7 +42,7 @@ class NotaRemisionDAO {
                 const servicios = await this.getServiciosByNota(row.id_nota);
 
                 // Crear instancia de NotaRemision
-                const notaRemision = new NotaRemision(cliente, servicios, row.fecha_entrega, row.total);
+                const notaRemision = new NotaRemision(cliente, servicios, row.fecha_entrega, row.total, row.estado);
                 callback(notaRemision);
             } else {
                 callback(null);  // Si no se encuentra la nota

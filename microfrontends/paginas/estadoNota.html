@@ -1,12 +1,100 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estado de Nota</title>
     <link rel="stylesheet" href="../css/estilos.css">
-    <script defer src="../NavBarComponent/navbar.js"></script>
+    <script defer src="../NavBarComponent/navbar1.js"></script>
+    <script>
+        // Decodificar el token JWT
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                return null;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                // Si no hay token, redirigir al login
+                window.location.href = 'inicioSesion.html';
+                return;
+            }
+
+            // Decodificar el token
+            const decodedToken = parseJwt(token);
+            if (!decodedToken) {
+                // Token inválido o expirado
+                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                localStorage.removeItem('jwtToken');
+                window.location.href = 'inicioSesion.html';
+                return;
+            }
+
+            // Validar rol del usuario
+            if (decodedToken.role === "admin") {
+                alert('Esta página es solo para clientes. Redirigiendo...');
+                window.location.href = 'index2.html';
+                return;
+            } else if (decodedToken.role !== "client") {
+                alert('Rol desconocido. Por favor, inicia sesión nuevamente.');
+                localStorage.removeItem('jwtToken');
+                window.location.href = 'inicioSesion.html';
+                return;
+            }
+
+            // Obtener el folio de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const folio = urlParams.get('folio'); // Obtener el valor del parámetro 'folio'
+
+            if (!folio) {
+                alert("No se especificó un folio.");
+                return;
+            }
+
+            // Obtener los detalles de la nota de remisión
+            fetch(`http://localhost:3000/api/v1/notas-remision/${folio}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        console.log(data);  // Verifica los datos recibidos
+
+                        // Llenar los campos del formulario con los datos de la nota
+                        document.getElementById('nota-titulo').textContent = `Nota de remisión: ${folio}`;
+                        document.getElementById('cliente').value = data.cliente?.nombre || "No disponible";
+                        document.getElementById('fecha').value = data.fecha_entrega || "No disponible";
+                        document.getElementById('total').value = data.total || "No disponible";
+                        document.getElementById('estado').value = data.estado || "No disponible";
+                        document.getElementById('servicios').value = data.servicios?.join(', ') || "No disponible";
+                    } else {
+                        alert("No se encontraron detalles para esta nota.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("No se pudo obtener los detalles de la nota.");
+                });
+        });
+
+
+        // Función para cerrar sesión
+        function cerrarSesion() {
+            localStorage.removeItem('jwtToken');
+            alert('Sesión cerrada.');
+            window.location.href = 'inicioSesion.html';
+        }
+    </script>
 </head>
+
 <body>
     <div class="form-container">
         <h2 id="nota-titulo">Nota de remisión:</h2>
@@ -30,28 +118,10 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const params = new URLSearchParams(window.location.search);
-
-            const folio = params.get("folio");
-            const cliente = params.get("cliente");
-            const fecha = params.get("fecha");
-            const total = params.get("total");
-            const estado = params.get("estado");
-            const servicios = params.get("servicios");
-
-            document.getElementById("nota-titulo").textContent = `Nota de remisión: ${folio}`;
-            document.getElementById("cliente").value = cliente || "No disponible";
-            document.getElementById("fecha").value = fecha || "No disponible";
-            document.getElementById("total").value = total || "No disponible";
-            document.getElementById("estado").value = estado || "No disponible";
-            document.getElementById("servicios").value = servicios || "No disponible";
-
-            document.getElementById("btn-regresar").addEventListener("click", () => {
-                window.location.href = "./consultarNota.html";
-            });
+        document.getElementById("btn-regresar").addEventListener("click", () => {
+            window.location.href = "./consultarNota.html";
         });
     </script>
 </body>
-</html>
 
+</html>

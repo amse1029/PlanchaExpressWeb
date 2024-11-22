@@ -1,6 +1,7 @@
--- Tabla Usuario
-CREATE TABLE Usuario (
-	id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+-- Tabla Administrador
+CREATE TABLE Administrador (
+	id_administrador INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(50),
     usuario VARCHAR(50),
     pass VARCHAR(50)
 );
@@ -11,7 +12,7 @@ CREATE TABLE Cliente (
     nombre VARCHAR(50),
     apellido VARCHAR(50),
     email VARCHAR(50),
-    password VARCHAR(15)
+    pass VARCHAR(15)
 );
 
 -- Tabla Queja

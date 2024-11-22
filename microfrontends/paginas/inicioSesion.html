@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="../css/estilos.css">
     <script defer src="../NavBarComponent/navbar.js"></script>
 </head>
+
 <body>
     <div class="form-container">
         <h2>Inicio de Sesión</h2>
@@ -38,28 +40,55 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ username: email, password }),
+                    body: JSON.stringify({ email, password }),
                 });
 
                 const data = await response.json();
 
+                console.log(data);
                 if (response.ok) {
-                    // Guardamos el token en localStorage
                     localStorage.setItem('jwtToken', data.token);
 
-                    alert('Inicio de sesión exitoso');
-                    // Redirigir a la página principal o al dashboard
-                    window.location.href = 'index2.html';
-                } else {
+                    // Decodificar el token para verificar el rol del usuario
+                    const decodedToken = parseJwt(data.token);
+
+                    if (decodedToken.role === 'admin') {
+                        window.location.href = 'index2.html'; // Página para administradores
+                    } else if (decodedToken.role === 'client') {
+                        window.location.href = 'index1.html'; // Página para clientes
+                    } else {
+                        alert('Rol desconocido, redirigiendo a página principal');
+                        window.location.href = 'inicioSesion.html';
+                    }
+                }
+                else {
                     // Muestra el mensaje de error
                     alert(data.error || 'Credenciales incorrectas');
                 }
             } catch (error) {
+                console.log(error);
                 console.error('Error al iniciar sesión:', error);
                 alert('Error al conectar con el servidor');
             }
         });
+
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1]; // Parte del payload
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(
+                    atob(base64)
+                        .split('')
+                        .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+                        .join('')
+                );
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error al decodificar el token:', error);
+                return null;
+            }
+        }
     </script>
 </body>
-</html>
 
+</html>

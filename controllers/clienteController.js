@@ -8,14 +8,10 @@ exports.listarClientes = (req, res) => {
 
 exports.agregarCliente = (req, res) => {
     console.log(req.body);
-    const { nombre, apellido, email, password, confirm_password } = req.body;
+    const { nombre, apellido, email, password, confirmar } = req.body;
 
-    console.log(nombre);
-    console.log(apellido);
-    console.log(email);
-    console.log(password);
     // Validar que las contraseñas coincidan
-    if (password !== confirm_password) {
+    if (password !== confirmar) {
         return res.status(400).json({ message: 'Las contraseñas no coinciden' });
     }
 

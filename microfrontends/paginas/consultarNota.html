@@ -5,7 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consultar Nota de Remisión</title>
     <link rel="stylesheet" href="../css/estilos.css">
-    <script defer src="../NavBarComponent/navbar.js"></script>
+    <script defer src="../NavBarComponent/navbar1.js"></script>
+    <script>
+        // Decodificar el token JWT
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                return null;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('jwtToken');
+            if (!token) {
+                // Si no hay token, redirigir al login
+                window.location.href = 'inicioSesion.html';
+                return;
+            }
+
+            // Decodificar el token
+            const decodedToken = parseJwt(token);
+            if (!decodedToken) {
+                // Token inválido o expirado
+                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                localStorage.removeItem('jwtToken');
+                window.location.href = 'inicioSesion.html';
+                return;
+            }
+
+            // Validar rol del usuario
+            if (decodedToken.role === "admin") {
+                // Redirigir al panel de administración si el rol es administrador
+                alert('Esta página es solo para clientes. Redirigiendo...');
+                window.location.href = 'index2.html';
+                return;
+            } else if (decodedToken.role !== "client") {
+                // Si el rol no es cliente, redirigir al inicio de sesión
+                alert('Rol desconocido. Por favor, inicia sesión nuevamente.');
+                localStorage.removeItem('jwtToken');
+                window.location.href = 'inicioSesion.html';
+                return;
+            }
+
+            // Mostrar el nombre del usuario en la página (campo opcional)
+            document.getElementById('userName').textContent = decodedToken.nombre || 'Usuario desconocido';
+        });
+
+        // Función para cerrar sesión
+        function cerrarSesion() {
+            localStorage.removeItem('jwtToken');
+            alert('Sesión cerrada.');
+            window.location.href = 'inicioSesion.html';
+        }
+    </script>
 </head>
 <body>
     <!-- Form -->
@@ -15,9 +73,6 @@
             <label for="folio">Folio:</label>
             <input type="text" id="folio" name="folio" placeholder="Ingresa el folio" required>
 
-            <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" name="fecha" required>
-
             <button type="button" id="buscar-btn">Buscar</button>
         </form>
     </div>
@@ -25,21 +80,20 @@
     <script>
         document.getElementById("buscar-btn").addEventListener("click", async () => {
             const folio = document.getElementById("folio").value;
-            const fecha = document.getElementById("fecha").value;
 
-            if (!folio || !fecha) {
+            if (!folio) {
                 alert("Por favor, completa todos los campos.");
                 return;
             }
 
             try {
-                const response = await fetch(`http://localhost:3000/api/v1/notas-remision?folio=${folio}&fecha=${fecha}`);
+                const response = await fetch(`http://localhost:3000/api/v1/notas-remision/${folio}`);
                 const data = await response.json();
 
                 if (response.ok) {
                     // Redirige a la pantalla de estadoNota con los datos
                     const params = new URLSearchParams(data).toString();
-                    window.location.href = `estadoNota.html?${params}`;
+                    window.location.href = `estadoNota.html?folio=${folio}`;
                 } else {
                     alert(data.message || "Error al consultar la nota.");
                 }

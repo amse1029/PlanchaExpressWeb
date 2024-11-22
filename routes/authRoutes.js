@@ -11,25 +11,36 @@ const usuarioDAO = new UsuarioDAO();
 
 // Ruta para autenticar y obtener un token JWT
 router.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    // Buscar el usuario en la base de datos usando async/await
-    const user = await usuarioDAO.getUsuarioByUsername(username);
+    // Buscar al usuario (cliente o admin) en las bases de datos
+    let user = await usuarioDAO.getClienteByEmail(email);
+    let role = 'client'; // Por defecto, asumimos que es cliente
 
-    // Verificar si el usuario existe y si la contraseña es correcta
+    if (!user) {
+      // Si no es cliente, verificar si es admin
+      user = await usuarioDAO.getAdminByEmail(email);
+      role = 'admin';
+    }
+
+    // Validar si se encontró un usuario válido
     if (!user || user.pass !== password) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    // Configura la duración del token en 1 minuto (60 segundos)
-    const expiresIn = 60;
-    const token = jwt.sign({ userId: user.usuario }, secretKey, { expiresIn });
+    // Crear el payload del token
+    const payload = {
+      userId: role === 'client' ? user.nombre : user.usuario, // Nombre para cliente, usuario para admin
+      role, // Rol del usuario
+      id: user.id,
+    };
 
-    // Respuesta con el token generado
+    // Generar el token
+    const token = jwt.sign(payload, secretKey, { expiresIn: '600' }); // Expira en 1 hora
     res.json({ token });
-    console.log(`Token generado: ${token}`);
 
+    console.log(`Token generado: ${token}`);
   } catch (error) {
     console.error('Error en el servidor:', error);
     res.status(500).json({ error: 'Error en el servidor' });
