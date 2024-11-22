@@ -58,12 +58,6 @@
             document.getElementById('userName').textContent = userName;
         });
 
-        // Función para cerrar sesión
-        function cerrarSesion() {
-            localStorage.removeItem('jwtToken');
-            alert('Sesión cerrada.');
-            window.location.href = 'inicioSesion.html';
-        }
     </script>
 </head>
 <body>
@@ -89,7 +83,5 @@
             </iframe>
         </div>
     </section>
-
-    <button onclick="cerrarSesion()">Cerrar Sesión</button>
 </body>
 </html>

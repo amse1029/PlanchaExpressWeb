@@ -1,4 +1,4 @@
-// navbar.js
+// navbar para no autenticados.js
 document.addEventListener('DOMContentLoaded', () => {
     // Crear e insertar el enlace al CSS del navbar
     const navbarStyles = document.createElement('link');

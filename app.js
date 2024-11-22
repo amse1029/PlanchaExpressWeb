@@ -68,6 +68,7 @@ const protectedPages = [
     '/consultarNota.html',
     '/estadoNota.html',
     '/contacto1.html',
+    '/reporteQuejas.html',
     '/reporteVentas.html',
     '/reporteServicios.html',
 ];
