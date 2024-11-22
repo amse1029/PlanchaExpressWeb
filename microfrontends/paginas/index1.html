@@ -53,8 +53,9 @@
                 return;
             }
 
-            // Mostrar el nombre del usuario en la página (campo opcional)
-            document.getElementById('userName').textContent = decodedToken.nombre || 'Usuario desconocido';
+            // Mostrar el nombre del usuario en la página
+            const userName = decodedToken.nombre || 'Usuario desconocido';
+            document.getElementById('userName').textContent = userName;
         });
 
         // Función para cerrar sesión

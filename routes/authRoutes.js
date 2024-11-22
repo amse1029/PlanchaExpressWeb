@@ -31,13 +31,13 @@ router.post('/login', async (req, res) => {
 
     // Crear el payload del token
     const payload = {
-      userId: role === 'client' ? user.nombre : user.usuario, // Nombre para cliente, usuario para admin
+      nombre: role === 'client' ? user.nombre : user.usuario, // Usar 'nombre' como clave
       role, // Rol del usuario
       id: user.id,
     };
 
     // Generar el token
-    const token = jwt.sign(payload, secretKey, { expiresIn: '600' }); // Expira en 1 hora
+    const token = jwt.sign(payload, secretKey, { expiresIn: '600' }); // Expira en 10 minutos
     res.json({ token });
 
     console.log(`Token generado: ${token}`);
