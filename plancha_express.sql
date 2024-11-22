@@ -36,6 +36,7 @@ CREATE TABLE NotaRemision (
     id_nota INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT,
     fecha_entrega DATE,
+    estado VARCHAR(20),
     total FLOAT,
     FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente)
 );

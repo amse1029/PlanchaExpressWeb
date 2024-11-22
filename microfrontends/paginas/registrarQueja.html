@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Quejas</title>
     <link rel="stylesheet" href="../css/estilos.css">
     <script defer src="../NavBarComponent/navbar1.js"></script>
+    <style>
+        textarea {
+            width: 99%;
+            height: 100px;
+            resize: none;
+        }
+    </style>
     <script>
+        
+
         // Decodificar el token JWT
         function parseJwt(token) {
             try {
@@ -22,6 +30,9 @@
             }
         }
 
+        // Definir el token decodificado a nivel global
+        let decodedToken = null;
+
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('jwtToken');
             if (!token) {
@@ -31,7 +42,7 @@
             }
 
             // Decodificar el token
-            const decodedToken = parseJwt(token);
+            decodedToken = parseJwt(token);
             if (!decodedToken) {
                 // Token inválido o expirado
                 alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
@@ -70,7 +81,7 @@
 
         // Enviar queja
         async function enviarQueja(event) {
-            e.preventDefault(); // Evita que se envíe el formulario por defecto
+            event.preventDefault(); // Evita que se envíe el formulario por defecto
 
             // Obtenemos los valores de los campos de texto
             const mensaje = document.getElementById('mensaje').value;
@@ -90,47 +101,30 @@
 
                 console.log(data);
                 if (response.ok) {
-                    localStorage.setItem('jwtToken', data.token);
-
-                    // Decodificar el token para verificar el rol del usuario
-                    const decodedToken = parseJwt(data.token);
-
-                    if (decodedToken.role === 'admin') {
-                        window.location.href = 'index2.html'; // Página para administradores
-                    } else if (decodedToken.role === 'client') {
-                        window.location.href = 'index1.html'; // Página para clientes
-                    } else {
-                        alert('Rol desconocido, redirigiendo a página principal');
-                        window.location.href = 'inicioSesion.html';
-                    }
+                    alert('Queja registrada con éxito!');
+                    // Limpiar el formulario
+                    document.getElementById('formQueja').reset();
                 }
                 else {
                     // Muestra el mensaje de error
-                    alert(data.error || 'Credenciales incorrectas');
+                    alert(data.error || 'Error al registrar la queja');
                 }
             } catch (error) {
                 console.log(error);
-                console.error('Error al iniciar sesión:', error);
+                console.error('Error al enviar la queja:', error);
                 alert('Error al conectar con el servidor');
             }
         }
     </script>
-    <style>
-        textarea {
-            width: 99%;
-            height: 100px;
-            resize: none;
-        }
-    </style>
 </head>
 
 <body>
     <div class="form-container">
         <h2>Registro de Quejas</h2>
-        <form id="formQueja">
+        <form id="formQueja" onsubmit="enviarQueja(event)">
             <label for="mensaje">Descripción</label>
             <textarea id="mensaje" name="mensaje" placeholder="Describe tu queja aquí..." rows="5" required></textarea>
-            <button type="submit" onclick="enviarQueja(event)">Registrar Queja</button>
+            <button type="submit">Registrar Queja</button>
         </form>
     </div>
 </body>
