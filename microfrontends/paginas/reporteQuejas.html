@@ -14,14 +14,14 @@
             padding: 0;
             background-color: #f5f5f5;
         }
-
+    
         header {
             background-color: #007BFF;
             color: white;
             padding: 10px 20px;
             text-align: center;
         }
-
+    
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -30,35 +30,42 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
+    
         h2 {
             color: #007BFF;
         }
-
+    
         .loading {
             text-align: center;
             padding: 20px;
             font-size: 18px;
             color: #888;
         }
-
+    
         #quejasList {
             list-style-type: none;
             padding: 0;
         }
-
+    
         .quejaItem {
-            background-color: #f9f9f9;
+            background-color: #ffffff;  /* Fondo blanco para las quejas */
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
             border: 1px solid #ddd;
+            color: #007BFF;  /* Color de texto azul para el contraste */
         }
-
+    
         .quejaItem:nth-child(even) {
-            background-color: #e9e9e9;
+            background-color: #f0f0f0;  /* Fondo gris suave para las quejas pares */
+        }
+    
+        .quejaItem:hover {
+            background-color: #007BFF;  /* Fondo azul cuando se pasa el mouse */
+            color: white;  /* Texto blanco cuando el fondo es azul */
         }
     </style>
+    
 </head>
 
 <body>

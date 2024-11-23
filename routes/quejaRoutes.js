@@ -4,7 +4,7 @@ const validarQueja = require('../middlewares/quejaValidation'); // Importa el mi
 const { verifyToken, verifyRole } = require('../middlewares/verifyToken');
 const router = express.Router();
 
-router.get('/', verifyToken, verifyRole('admin'), async (req, res) => {}, quejaController.listarQuejas);
+router.get('/', quejaController.listarQuejas);
 router.post('/',  quejaController.agregarQueja);
 
 module.exports = router;
