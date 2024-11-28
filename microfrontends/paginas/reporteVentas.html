@@ -21,6 +21,38 @@
             }
         }
 
+        // Función para renderizar el reporte
+        function renderizarReporte(data) {
+            const reporteContainer = document.getElementById('reporte');
+            reporteContainer.innerHTML = '';
+
+            if (!data || !data.trim()) {
+                reporteContainer.innerHTML = '<p>No se encontraron datos para mostrar.</p>';
+                return;
+            }
+
+            const filas = data.trim().split('\n').filter(row => row.includes('|'));
+            const tabla = document.createElement('table');
+            tabla.classList.add('tabla-reporte');
+
+            filas.forEach((fila, index) => {
+                const columnas = fila.split('|').map(col => col.trim());
+                const filaElemento = document.createElement(index === 0 ? 'thead' : 'tr');
+
+                columnas.forEach((columna, colIndex) => {
+                    const celda = document.createElement(index === 0 || colIndex === 0 ? 'th' : 'td');
+                    celda.textContent = columna;
+                    filaElemento.appendChild(celda);
+                });
+
+                tabla.appendChild(filaElemento);
+            });
+
+            reporteContainer.appendChild(tabla);
+        }
+
+        
+
         // Función para obtener el reporte de ventas
         function obtenerReporte(filtroFecha) {
             const token = localStorage.getItem('jwtToken');
@@ -29,7 +61,6 @@
                 return;
             }
 
-            // Decodificar el token
             const decodedToken = parseJwt(token);
             if (!decodedToken) {
                 alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
@@ -38,19 +69,15 @@
                 return;
             }
 
-            // Validar rol del usuario
             if (decodedToken.role !== "admin") {
                 alert('Esta página es solo para administradores. Redirigiendo...');
                 window.location.href = 'index1.html';
                 return;
             }
 
-            // Realizar la solicitud al servidor para obtener el reporte
             fetch(`http://localhost:3000/api/v1/reportes/ventas/${filtroFecha}`)
                 .then(response => response.text())
-                .then(data => {
-                    document.getElementById('reporte').textContent = data;
-                })
+                .then(data => renderizarReporte(data)) // Renderizar el reporte
                 .catch(error => {
                     console.error('Error al obtener el reporte:', error);
                     alert('Error al obtener el reporte de ventas.');
@@ -58,17 +85,16 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Al cargar la página, generar el reporte diario por defecto
             obtenerReporte('diario');
         });
 
-        // Función para cerrar sesión
         function cerrarSesion() {
             localStorage.removeItem('jwtToken');
             alert('Sesión cerrada.');
             window.location.href = 'inicioSesion.html';
         }
     </script>
+    
 </head>
 <body>
     <div class="container">
@@ -85,6 +111,5 @@
             <!-- Aquí se mostrará el reporte generado por el servidor -->
         </div>
     </div>
-
 </body>
 </html>

@@ -264,3 +264,63 @@ body {
     border: 2px solid #05C7F2; /* Opcional: bordes para el mapa */
     border-radius: 10px; /* Opcional: bordes redondeados */
 }
+
+.tabla-reporte {
+    width: 80%; /* Ocupa el 80% del ancho de la página */
+    margin: 20px auto; /* Centra la tabla horizontalmente */
+    border-collapse: collapse;
+    font-size: 16px;
+    text-align: left;
+    background-color: #f9f9ff; /* Fondo en tonos claros */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+    border-radius: 8px; /* Bordes redondeados */
+    overflow: hidden;
+}
+
+.tabla-reporte th, .tabla-reporte td {
+    border: 1px solid #d0e1f9; /* Bordes en azul claro */
+    padding: 12px;
+}
+
+.tabla-reporte th {
+    background-color: #d0e1f9; /* Fondo azul claro para el encabezado */
+    color: #003366; /* Texto azul oscuro */
+    font-weight: bold;
+    text-align: center;
+}
+
+.tabla-reporte tr:nth-child(even) {
+    background-color: #eaf2fb; /* Fondo ligeramente más oscuro en filas pares */
+}
+
+.tabla-reporte tr:hover {
+    background-color: #cce0f5; /* Resaltado en azul claro al pasar el cursor */
+    cursor: pointer;
+}
+
+.container {
+    font-family: Arial, sans-serif;
+    color: #003366; /* Texto principal azul oscuro */
+    text-align: center;
+}
+
+.filtros button {
+    background-color: #00509e; /* Botones azul fuerte */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.filtros button:hover {
+    background-color: #003366; /* Botones más oscuros al pasar el cursor */
+}
+
+.filtros h3 {
+    color: #003366; /* Texto de los filtros */
+    margin-bottom: 10px;
+}

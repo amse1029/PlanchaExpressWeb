@@ -35,10 +35,11 @@ Fecha: ${new Date().toLocaleDateString()}
 ${ventas.map(v => `| ${v.idNota.toString().padEnd(8)} | ${v.fecha.toISOString().slice(0, 10).padEnd(12)} | ${v.total.toFixed(2).padEnd(5)} |`).join('\n')}
 ----------------------------------------
 Total Ventas: ${totalVentas.toFixed(2)}
-Nota más cara: ID ${notaMasCara.idNota} (${notaMasCara.total} unidades)
+Nota más cara: ID ${notaMasCara.idNota} (${notaMasCara.total.toFixed(2)})
 Media: ${media.toFixed(2)}, Moda: ${moda}, Mediana: ${mediana}
                 `;
-                callback(reporte);
+callback(reporte);
+
             } else {
                 callback('No se encontraron ventas para el rango de fechas seleccionado.');
             }
