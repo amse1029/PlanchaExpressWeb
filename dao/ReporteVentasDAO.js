@@ -13,19 +13,16 @@ class ReporteVentasDAO {
             if (err) throw err;
 
             if (rows.length > 0) {
-                // Calcular medidas estadísticas
                 const ventas = rows.map(row => ({
                     idNota: row.id_nota,
                     fecha: row.fecha_entrega,
                     total: row.total
                 }));
 
-                const totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
-                const notaMasCara = this.obtenerNotaMasCara(ventas);
-                const media = this.calcularMedia(ventas.map(v => v.total));
-                const moda = this.calcularModa(ventas.map(v => v.total));
-                const mediana = this.calcularMediana(ventas.map(v => v.total));
+                // Calcular estadísticas
+                const estadisticas = this.calcularEstadisticas(ventas);
 
+                // Crear el reporte en formato de tabla
                 const reporte = `
 Reporte de Ventas (${filtroFecha})
 Fecha: ${new Date().toLocaleDateString()}
@@ -34,17 +31,33 @@ Fecha: ${new Date().toLocaleDateString()}
 ----------------------------------------
 ${ventas.map(v => `| ${v.idNota.toString().padEnd(8)} | ${v.fecha.toISOString().slice(0, 10).padEnd(12)} | ${v.total.toFixed(2).padEnd(5)} |`).join('\n')}
 ----------------------------------------
-Total Ventas: ${totalVentas.toFixed(2)}
-Nota más cara: ID ${notaMasCara.idNota} (${notaMasCara.total.toFixed(2)})
-Media: ${media.toFixed(2)}, Moda: ${moda}, Mediana: ${mediana}
+Estadísticas
+----------------------------------------
+Total Ventas: ${estadisticas.totalVentas.toFixed(2)}
+Nota más cara: ID ${estadisticas.notaMasCara.idNota} (${estadisticas.notaMasCara.total.toFixed(2)})
+Media: ${estadisticas.media.toFixed(2)}, Moda: ${estadisticas.moda}, Mediana: ${estadisticas.mediana}
                 `;
-callback(reporte);
-
+                callback(reporte);
             } else {
                 callback('No se encontraron ventas para el rango de fechas seleccionado.');
             }
-
         });
+    }
+
+    calcularEstadisticas(ventas) {
+        const totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);
+        const notaMasCara = this.obtenerNotaMasCara(ventas);
+        const media = this.calcularMedia(ventas.map(v => v.total));
+        const moda = this.calcularModa(ventas.map(v => v.total));
+        const mediana = this.calcularMediana(ventas.map(v => v.total));
+
+        return {
+            totalVentas,
+            notaMasCara,
+            media,
+            moda,
+            mediana
+        };
     }
 
     obtenerFechas(filtroFecha) {
@@ -90,13 +103,12 @@ callback(reporte);
         return arr.length % 2 === 0 ? (arr[mitad - 1] + arr[mitad]) / 2 : arr[mitad];
     }
 
-    cerrarConexion(){
+    cerrarConexion() {
         connection.end((err) => {
             if (err) throw err;
             console.log('Conexión cerrada');
         });
     }
-
 }
 
 module.exports = ReporteVentasDAO;
