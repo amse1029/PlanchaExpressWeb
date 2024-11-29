@@ -27,8 +27,7 @@ CREATE TABLE Queja (
 CREATE TABLE Servicio (
     id_servicio INT AUTO_INCREMENT PRIMARY KEY,
     descripcion VARCHAR(100),
-    precio FLOAT,
-    cantidad INT
+    precio FLOAT
 );
 
 -- Tabla NotaRemision
@@ -46,6 +45,7 @@ CREATE TABLE NotaServicio (
     id_nota_servicio INT AUTO_INCREMENT PRIMARY KEY,
     id_nota INT,
     id_servicio INT,
+    cantidad INT,
     FOREIGN KEY (id_nota) REFERENCES NotaRemision(id_nota),
     FOREIGN KEY (id_servicio) REFERENCES Servicio(id_servicio)
 );
@@ -66,7 +66,8 @@ CREATE TABLE ReporteVenta (
 -- Tabla ReporteServicios (extiende Reporte)
 CREATE TABLE ReporteServicios (
     id_reporte INT,
-    id_servicio INT,
+    id_nota_servicio INT,
     FOREIGN KEY (id_reporte) REFERENCES Reporte(id_reporte),
-    FOREIGN KEY (id_servicio) REFERENCES Servicio(id_servicio)
+    FOREIGN KEY (id_nota_servicio) REFERENCES NotaServicio(id_nota_servicio)
 );
+
