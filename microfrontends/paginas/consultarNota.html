@@ -21,6 +21,9 @@
             }
         }
 
+        // Definir el token decodificado a nivel global
+        let decodedToken = null;
+
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('jwtToken');
             if (!token) {
@@ -30,7 +33,7 @@
             }
 
             // Decodificar el token
-            const decodedToken = parseJwt(token);
+            decodedToken = parseJwt(token);
             if (!decodedToken) {
                 // Token inválido o expirado
                 alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
@@ -53,8 +56,8 @@
                 return;
             }
 
-            // Mostrar el nombre del usuario en la página (campo opcional)
-            document.getElementById('userName').textContent = decodedToken.nombre || 'Usuario desconocido';
+            // Rellenar el campo idCliente con el id del token decodificado
+            document.getElementById('idCliente').value = decodedToken.id; // Asume que el token contiene un 'id'
         });
 
         // Función para cerrar sesión
@@ -63,31 +66,31 @@
             alert('Sesión cerrada.');
             window.location.href = 'inicioSesion.html';
         }
-    </script>
-</head>
-<body>
-    <!-- Form -->
-    <div class="form-container">
-        <h2>Consultar Nota</h2>
-        <form id="consulta-form">
-            <label for="folio">Folio:</label>
-            <input type="text" id="folio" name="folio" placeholder="Ingresa el folio" required>
 
-            <button type="button" id="buscar-btn">Buscar</button>
-        </form>
-    </div>
+        async function buscarNota(event) {
+            event.preventDefault();
 
-    <script>
-        document.getElementById("buscar-btn").addEventListener("click", async () => {
             const folio = document.getElementById("folio").value;
-
+            const idCliente = document.getElementById("idCliente").value; // Obtener el idCliente del campo oculto
+            
             if (!folio) {
                 alert("Por favor, completa todos los campos.");
                 return;
             }
+            if(!idCliente){
+                alert("No seas mamon");
+                return;
+            }
 
             try {
-                const response = await fetch(`http://localhost:3000/api/v1/notas-remision/${folio}`);
+                const response = await fetch(`http://localhost:3000/api/v1/notas-remision/consultarNota`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ folio, idCliente }),
+                });
+
                 const data = await response.json();
 
                 if (response.ok) {
@@ -101,8 +104,23 @@
                 console.error("Error:", error);
                 alert("No se pudo conectar con el servidor.");
             }
-        });
+        }
     </script>
-</body>
-</html>
+</head>
 
+<body>
+    <div class="form-container">
+        <h2>Consultar Nota de Remisión</h2>
+        <form id="consulta-form" onsubmit="buscarNota(event)">
+            <label for="folio">Folio</label>
+            <input type="text" id="folio" name="folio" placeholder="Ingresa el folio" required>
+
+            <!-- Campo oculto para el idCliente -->
+            <input type="hidden" id="idCliente" name="idCliente">
+
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+</body>
+
+</html>

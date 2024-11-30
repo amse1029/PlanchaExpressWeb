@@ -6,7 +6,7 @@ const Servicio = require('../dominio/Servicio');
 
 class NotaRemisionDAO {
     // Obtener todas las notas de remisión
-    getAllNotas(callback) {
+    async getAllNotas(callback) {
         connection.query('SELECT * FROM NotaRemision', async (err, rows) => {
             if (err) throw err;
 
@@ -15,19 +15,17 @@ class NotaRemisionDAO {
                 const clienteDAO = new ClienteDAO();
                 const cliente = await this.getClientePromise(clienteDAO, row.id_cliente);
 
-                const serviciosDAO = new ServicioDAO();
                 const servicios = await this.getServiciosByNota(row.id_nota);
 
-                return new NotaRemision(cliente, servicios, row.fecha_entrega, row.total);
+                return new NotaRemision(cliente, servicios, row.fecha_entrega, row.total, row.estado);
             }));
 
             callback(notasRemision);
-
         });
     }
 
     // Obtener una nota de remisión por su ID
-    getNotaById(id, callback) {
+    async getNotaById(id, callback) {
         connection.query('SELECT * FROM NotaRemision WHERE id_nota = ?', [id], async (err, rows) => {
             if (err) throw err;
 
@@ -47,16 +45,14 @@ class NotaRemisionDAO {
             } else {
                 callback(null);  // Si no se encuentra la nota
             }
-
         });
     }
 
     // Agregar una nueva nota de remisión
-    addNota(idCliente, fechaEntrega, total, callback) {
-        connection.query('INSERT INTO NotaRemision (id_cliente, fecha_entrega, total) VALUES (?, ?, ?)', [idCliente, fechaEntrega, total], (err, result) => {
+    addNota(idCliente, fechaEntrega, total, estado, callback) {
+        connection.query('INSERT INTO NotaRemision (id_cliente, fecha_entrega, total, estado) VALUES (?, ?, ?, ?)', [idCliente, fechaEntrega, total, estado], (err, result) => {
             if (err) throw err;
             callback(result.insertId);
-
         });
     }
 
@@ -65,16 +61,14 @@ class NotaRemisionDAO {
         connection.query('DELETE FROM NotaRemision WHERE id_nota = ?', [id], (err) => {
             if (err) throw err;
             callback();
-
         });
     }
 
     // Actualizar una nota de remisión
-    updateNota(id, fechaEntrega, total, callback) {
-        connection.query('UPDATE NotaRemision SET fecha_entrega = ?, total = ? WHERE id_nota = ?', [fechaEntrega, total, id], (err) => {
+    updateNota(id, fechaEntrega, total, estado, callback) {
+        connection.query('UPDATE NotaRemision SET fecha_entrega = ?, total = ?, estado = ? WHERE id_nota = ?', [fechaEntrega, total, estado, id], (err) => {
             if (err) throw err;
             callback();
-
         });
     }
 
@@ -91,7 +85,7 @@ class NotaRemisionDAO {
     getServiciosByNota(idNota) {
         return new Promise((resolve, reject) => {
             const query = `
-            SELECT s.descripcion, s.precio, s.cantidad 
+            SELECT s.descripcion, s.precio, ns.cantidad
             FROM Servicio s
             JOIN NotaServicio ns ON s.id_servicio = ns.id_servicio
             WHERE ns.id_nota = ?`;
@@ -99,14 +93,36 @@ class NotaRemisionDAO {
             connection.query(query, [idNota], (err, rows) => {
                 if (err) reject(err);
 
-                // Crear las instancias de Servicio
+                // Crear las instancias de Servicio con cantidad
                 const servicios = rows.map(row => new Servicio(row.descripcion, row.precio, row.cantidad));
                 resolve(servicios);
-
             });
         });
     }
 
+    getNotaByFolioAndCliente(folio, idCliente, callback) {
+        connection.query('SELECT * FROM NotaRemision WHERE id_nota = ? AND id_cliente = ?', [folio, idCliente], async (err, rows) => {
+            if (err) throw err;
+
+            if (rows.length > 0) {
+                const row = rows[0];
+
+                // Obtener cliente
+                const clienteDAO = new ClienteDAO();
+                const cliente = await this.getClientePromise(clienteDAO, row.id_cliente);
+
+                // Obtener servicios asociados a la nota
+                const servicios = await this.getServiciosByNota(row.id_nota);
+
+                // Crear instancia de NotaRemision
+                const notaRemision = new NotaRemision(cliente, servicios, row.fecha_entrega, row.total, row.estado);
+                callback(notaRemision);
+            } else {
+                callback(null);  // Si no se encuentra la nota
+            }
+        });
+    }
+    
 }
 
 module.exports = NotaRemisionDAO;

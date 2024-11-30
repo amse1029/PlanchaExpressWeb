@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,33 +27,59 @@
             const reporteContainer = document.getElementById('reporte');
             reporteContainer.innerHTML = '';
 
-            if (!data || !data.trim()) {
-                reporteContainer.innerHTML = '<p>No se encontraron datos para mostrar.</p>';
+            if (data.mensaje) {
+                // Si hay un mensaje de error o datos vacíos
+                reporteContainer.innerHTML = `<p>${data.mensaje}</p>`;
                 return;
             }
 
-            const filas = data.trim().split('\n').filter(row => row.includes('|'));
+            // Crear tabla de notas de remisión
             const tabla = document.createElement('table');
             tabla.classList.add('tabla-reporte');
 
-            filas.forEach((fila, index) => {
-                const columnas = fila.split('|').map(col => col.trim());
-                const filaElemento = document.createElement(index === 0 ? 'thead' : 'tr');
-
-                columnas.forEach((columna, colIndex) => {
-                    const celda = document.createElement(index === 0 || colIndex === 0 ? 'th' : 'td');
-                    celda.textContent = columna;
-                    filaElemento.appendChild(celda);
-                });
-
-                tabla.appendChild(filaElemento);
+            // Encabezados
+            const encabezados = ['ID Nota', 'Fecha', 'Total'];
+            const thead = document.createElement('thead');
+            const filaEncabezados = document.createElement('tr');
+            encabezados.forEach(encabezado => {
+                const th = document.createElement('th');
+                th.textContent = encabezado;
+                filaEncabezados.appendChild(th);
             });
+            thead.appendChild(filaEncabezados);
+            tabla.appendChild(thead);
+
+            // Filas
+            const tbody = document.createElement('tbody');
+            data.ventas.forEach(venta => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${venta.idNota}</td>
+                    <td>${new Date(venta.fecha).toLocaleDateString()}</td>
+                    <td>${venta.total.toFixed(2)}</td>
+                `;
+                tbody.appendChild(fila);
+            });
+            tabla.appendChild(tbody);
 
             reporteContainer.appendChild(tabla);
+
+            // Mostrar estadísticas
+            const estadisticasDiv = document.createElement('div');
+            estadisticasDiv.classList.add('estadisticas');
+            estadisticasDiv.innerHTML = `
+                <h3>Estadísticas</h3>
+                <p>Total Ventas: ${data.estadisticas.totalVentas.toFixed(2)}</p>
+                <p>Nota más cara: ID ${data.estadisticas.notaMasCara.idNota} (${data.estadisticas.notaMasCara.total.toFixed(2)})</p>
+                <p>Media: ${data.estadisticas.media.toFixed(2)}</p>
+                <p>Moda: ${data.estadisticas.moda}</p>
+                <p>Mediana: ${data.estadisticas.mediana}</p>
+            `;
+            reporteContainer.appendChild(estadisticasDiv);
         }
 
         // Función para obtener el reporte de ventas
-        function obtenerReporte(filtroFecha) {
+        async function obtenerReporte(filtroFecha) {
             const token = localStorage.getItem('jwtToken');
             if (!token) {
                 window.location.href = 'inicioSesion.html';
@@ -73,13 +100,17 @@
                 return;
             }
 
-            fetch(`http://localhost:3000/api/v1/reportes/ventas/${filtroFecha}`)
-                .then(response => response.text())
-                .then(data => renderizarReporte(data)) // Renderizar el reporte
-                .catch(error => {
-                    console.error('Error al obtener el reporte:', error);
-                    alert('Error al obtener el reporte de ventas.');
-                });
+            try {
+                const response = await fetch(`http://localhost:3000/api/v1/reportes/ventas/${filtroFecha}`);
+                if (!response.ok) {
+                    throw new Error(`Error al obtener el reporte: ${response.statusText}`);
+                }
+                const data = await response.json();
+                renderizarReporte(data);
+            } catch (error) {
+                console.error('Error al obtener el reporte:', error);
+                alert('Error al obtener el reporte de ventas.');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -92,8 +123,8 @@
             window.location.href = 'inicioSesion.html';
         }
     </script>
-    
 </head>
+
 <body>
     <div class="container">
         <h1>Reporte de Ventas</h1>
@@ -110,4 +141,5 @@
         </div>
     </div>
 </body>
+
 </html>

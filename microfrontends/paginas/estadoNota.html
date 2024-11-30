@@ -22,7 +22,7 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {  // Agregar async aquí
             const token = localStorage.getItem('jwtToken');
             if (!token) {
                 // Si no hay token, redirigir al login
@@ -55,43 +55,53 @@
             // Obtener el folio de la URL
             const urlParams = new URLSearchParams(window.location.search);
             const folio = urlParams.get('folio'); // Obtener el valor del parámetro 'folio'
+            const idCliente = decodedToken.id;
 
             if (!folio) {
                 alert("No se especificó un folio.");
                 return;
             }
 
-            // Obtener los detalles de la nota de remisión
-            fetch(`http://localhost:3000/api/v1/notas-remision/${folio}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        console.log(data);  // Verifica los datos recibidos
-
-                        // Llenar los campos del formulario con los datos de la nota
-                        document.getElementById('nota-titulo').textContent = `Nota de remisión: ${folio}`;
-                        document.getElementById('cliente').value = data.cliente?.nombre || "No disponible";
-                        document.getElementById('fecha').value = data.fecha_entrega || "No disponible";
-                        document.getElementById('total').value = data.total || "No disponible";
-                        document.getElementById('estado').value = data.estado || "No disponible";
-                        document.getElementById('servicios').value = data.servicios?.join(', ') || "No disponible";
-                    } else {
-                        alert("No se encontraron detalles para esta nota.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("No se pudo obtener los detalles de la nota.");
+            try {
+                const response = await fetch(`http://localhost:3000/api/v1/notas-remision/consultarNota`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ folio, idCliente }),
                 });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    console.log(data);  // Verifica los datos recibidos
+
+                    // Llenar los campos del formulario con los datos de la nota
+                    document.getElementById('nota-titulo').textContent = `Nota de remisión: ${folio}`;
+                    document.getElementById('cliente').value = data.cliente?.nombre || "No disponible";
+                    document.getElementById('fecha').value = data.fecha_entrega || "No disponible";
+                    document.getElementById('total').value = data.total || "No disponible";
+                    document.getElementById('estado').value = data.estado || "No disponible";
+                    document.getElementById('servicios').value = data.servicios?.map(servicio =>
+                        `${servicio.descripcion} - Precio: ${servicio.precio} - Cantidad: ${servicio.cantidad}`
+                    ).join('\n') || "No disponible";
+
+
+                } else {
+                    alert(data.message || "Error al consultar la nota.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("No se pudo conectar con el servidor.");
+            }
+
+            // Función para cerrar sesión
+            function cerrarSesion() {
+                localStorage.removeItem('jwtToken');
+                alert('Sesión cerrada.');
+                window.location.href = 'inicioSesion.html';
+            }
         });
-
-
-        // Función para cerrar sesión
-        function cerrarSesion() {
-            localStorage.removeItem('jwtToken');
-            alert('Sesión cerrada.');
-            window.location.href = 'inicioSesion.html';
-        }
     </script>
 </head>
 

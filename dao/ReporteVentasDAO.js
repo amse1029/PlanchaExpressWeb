@@ -8,41 +8,33 @@ class ReporteVentasDAO {
             WHERE NotaRemision.fecha_entrega BETWEEN ? AND ?
         `;
         const { fechaInicio, fechaFin } = this.obtenerFechas(filtroFecha);
-
+    
         connection.query(query, [fechaInicio, fechaFin], (err, rows) => {
             if (err) throw err;
-
+    
             if (rows.length > 0) {
                 const ventas = rows.map(row => ({
                     idNota: row.id_nota,
                     fecha: row.fecha_entrega,
                     total: row.total
                 }));
-
+    
                 // Calcular estadísticas
                 const estadisticas = this.calcularEstadisticas(ventas);
-
-                // Crear el reporte en formato de tabla
-                const reporte = `
-Reporte de Ventas (${filtroFecha})
-Fecha: ${new Date().toLocaleDateString()}
-----------------------------------------
-| ID Nota | Fecha        | Total |
-----------------------------------------
-${ventas.map(v => `| ${v.idNota.toString().padEnd(8)} | ${v.fecha.toISOString().slice(0, 10).padEnd(12)} | ${v.total.toFixed(2).padEnd(5)} |`).join('\n')}
-----------------------------------------
-Estadísticas
-----------------------------------------
-Total Ventas: ${estadisticas.totalVentas.toFixed(2)}
-Nota más cara: ID ${estadisticas.notaMasCara.idNota} (${estadisticas.notaMasCara.total.toFixed(2)})
-Media: ${estadisticas.media.toFixed(2)}, Moda: ${estadisticas.moda}, Mediana: ${estadisticas.mediana}
-                `;
-                callback(reporte);
+    
+                // Enviar un objeto JSON con los datos y estadísticas
+                const reporte = {
+                    filtro: filtroFecha,
+                    fechaGeneracion: new Date().toLocaleDateString(),
+                    ventas,
+                    estadisticas
+                };
+                callback(null, reporte);
             } else {
-                callback('No se encontraron ventas para el rango de fechas seleccionado.');
+                callback(null, { mensaje: 'No se encontraron ventas para el rango de fechas seleccionado.' });
             }
         });
-    }
+    }    
 
     calcularEstadisticas(ventas) {
         const totalVentas = ventas.reduce((sum, v) => sum + v.total, 0);

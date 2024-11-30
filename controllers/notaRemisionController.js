@@ -15,15 +15,21 @@ exports.agregarNota = (req, res) => {
 
 // Método para consultar una nota de remisión por folio
 exports.consultarNota = (req, res) => {
-    const { folio } = req.params;  // Obtener el folio de los parámetros de la ruta
+    const { folio, idCliente } = req.body;
 
-    // Validar que el folio esté presente
-    if (!folio) {
-        return res.status(400).json({ message: "Folio es requerido" });
+    if (!folio || !idCliente) {
+        return res.status(400).json({ message: "Faltan parámetros." });
     }
 
-    // Buscar la nota de remisión por folio
-    notaRemisionDAO.getNotaById(folio, (nota) => {
+    notaRemisionDAO.getNotaByFolioAndCliente(folio, idCliente, (nota, error) => {
+        if (error) {
+            return res.status(500).json({ message: error });
+        }
+
+        if (!nota) {
+            return res.status(404).json({ message: "Nota no encontrada para este cliente." });
+        }
+        
         if (nota) {
             res.json({
                 folio: folio,

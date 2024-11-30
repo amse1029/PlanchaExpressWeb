@@ -13,7 +13,7 @@ class ReporteServiciosDAO {
         const { fechaInicio, fechaFin } = this.obtenerFechas(filtroFecha);
 
         connection.query(query, [fechaInicio, fechaFin], (err, rows) => {
-            if (err) throw err;
+            if (err) return callback(err, null);
 
             if (rows.length > 0) {
                 const servicios = rows.map(row => ({
@@ -22,46 +22,27 @@ class ReporteServiciosDAO {
                     cantidadTotal: row.cantidad_total
                 }));
 
-                // Calcular estadísticas
                 const estadisticas = this.calcularEstadisticas(servicios);
 
-                // Crear el reporte en formato de tabla
-                const reporte = `
-Reporte de Servicios (${filtroFecha})
-Fecha: ${new Date().toLocaleDateString()}
-----------------------------------------
-| Descripción         | Precio | Cantidad Total |
-----------------------------------------
-${servicios.map(s => `| ${s.descripcion.padEnd(20)} | ${s.precio.toFixed(2).padEnd(6)} | ${s.cantidadTotal.toString().padEnd(14)} |`).join('\n')}
-----------------------------------------
-Estadísticas
-----------------------------------------
-Total Servicios Realizados: ${estadisticas.totalServicios}
-Servicio más solicitado: ${estadisticas.servicioMasSolicitado.descripcion} (${estadisticas.servicioMasSolicitado.cantidadTotal} veces)
-Media: ${estadisticas.media.toFixed(2)}, Moda: ${estadisticas.moda}, Mediana: ${estadisticas.mediana}
-                `;
-                callback(reporte);
+                callback(null, { servicios, estadisticas });
             } else {
-                callback('No se encontraron servicios para el rango de fechas seleccionado.');
+                callback(null, { mensaje: 'No se encontraron servicios para el rango de fechas seleccionado.' });
             }
         });
     }
 
     calcularEstadisticas(servicios) {
-        const totalServicios = servicios.reduce((sum, s) => sum + s.cantidadTotal, 0);
+        const totalServicios = servicios.reduce((sum, s) => sum + Number(s.cantidadTotal), 0);
         const servicioMasSolicitado = this.obtenerMasSolicitado(servicios);
-        const media = this.calcularMedia(servicios.map(s => s.cantidadTotal));
-        const moda = this.calcularModa(servicios.map(s => s.cantidadTotal));
-        const mediana = this.calcularMediana(servicios.map(s => s.cantidadTotal));
-
+        const cantidades = servicios.map(s => Number(s.cantidadTotal));
         return {
             totalServicios,
             servicioMasSolicitado,
-            media,
-            moda,
-            mediana
+            media: this.calcularMedia(cantidades),
+            moda: this.calcularModa(cantidades),
+            mediana: this.calcularMediana(cantidades)
         };
-    }
+    }    
 
     obtenerFechas(filtroFecha) {
         const hoy = new Date();

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,32 +27,55 @@
             const reporteContainer = document.getElementById('reporte');
             reporteContainer.innerHTML = '';
 
-            if (!data || !data.trim()) {
-                reporteContainer.innerHTML = '<p>No se encontraron datos para mostrar.</p>';
+            if (data.mensaje) {
+                reporteContainer.innerHTML = `<p>${data.mensaje}</p>`;
                 return;
             }
 
-            const filas = data.trim().split('\n').filter(row => row.includes('|'));
+            const { servicios, estadisticas } = data;
+
+            // Crear tabla para los servicios
             const tabla = document.createElement('table');
             tabla.classList.add('tabla-reporte');
 
-            filas.forEach((fila, index) => {
-                const columnas = fila.split('|').map(col => col.trim());
-                const filaElemento = document.createElement(index === 0 ? 'thead' : 'tr');
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+        <tr>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Cantidad Total</th>
+        </tr>
+    `;
+            tabla.appendChild(thead);
 
-                columnas.forEach((columna, colIndex) => {
-                    const celda = document.createElement(index === 0 || colIndex === 0 ? 'th' : 'td');
-                    celda.textContent = columna;
-                    filaElemento.appendChild(celda);
-                });
-
-                tabla.appendChild(filaElemento);
+            const tbody = document.createElement('tbody');
+            servicios.forEach(servicio => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+            <td>${servicio.descripcion}</td>
+            <td>${servicio.precio.toFixed(2)}</td>
+            <td>${servicio.cantidadTotal}</td>
+        `;
+                tbody.appendChild(fila);
             });
+            tabla.appendChild(tbody);
 
             reporteContainer.appendChild(tabla);
+
+            // Mostrar estadísticas
+            const estadisticasDiv = document.createElement('div');
+            estadisticasDiv.classList.add('estadisticas');
+            estadisticasDiv.innerHTML = `
+        <h3>Estadísticas</h3>
+        <p>Total Servicios Realizados: ${estadisticas.totalServicios}</p>
+        <p>Servicio más solicitado: ${estadisticas.servicioMasSolicitado.descripcion} (${estadisticas.servicioMasSolicitado.cantidadTotal} veces)</p>
+        <p>Media: ${estadisticas.media.toFixed(2)}</p>
+        <p>Moda: ${estadisticas.moda}</p>
+        <p>Mediana: ${estadisticas.mediana}</p>
+    `;
+            reporteContainer.appendChild(estadisticasDiv);
         }
 
-        // Función para obtener el reporte de servicios
         function obtenerReporte(filtroFecha) {
             const token = localStorage.getItem('jwtToken');
             if (!token) {
@@ -60,21 +84,14 @@
             }
 
             const decodedToken = parseJwt(token);
-            if (!decodedToken) {
-                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-                localStorage.removeItem('jwtToken');
+            if (!decodedToken || decodedToken.role !== "admin") {
+                alert('Acceso denegado. Redirigiendo...');
                 window.location.href = 'inicioSesion.html';
                 return;
             }
 
-            if (decodedToken.role !== "admin") {
-                alert('Esta página es solo para administradores. Redirigiendo...');
-                window.location.href = 'index1.html';
-                return;
-            }
-
             fetch(`http://localhost:3000/api/v1/reportes/servicios/${filtroFecha}`)
-                .then(response => response.text())
+                .then(response => response.json())
                 .then(data => renderizarReporte(data))
                 .catch(error => {
                     console.error('Error al obtener el reporte:', error);
@@ -93,6 +110,7 @@
         }
     </script>
 </head>
+
 <body>
     <div class="container">
         <h1>Reporte de Servicios</h1>
@@ -109,4 +127,5 @@
         </div>
     </div>
 </body>
+
 </html>

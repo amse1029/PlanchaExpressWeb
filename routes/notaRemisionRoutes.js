@@ -4,7 +4,7 @@ const validarNotaRemision = require('../middlewares/notaRemisionValidation'); //
 const router = express.Router();
 
 router.get('/', notaRemisionController.listarNotas);
-router.post('/', validarNotaRemision, notaRemisionController.agregarNota); // Añade el middleware aquí
-router.get('/:folio', notaRemisionController.consultarNota);
+router.post('/', validarNotaRemision, notaRemisionController.agregarNota); 
+router.post('/consultarNota', notaRemisionController.consultarNota);
 
 module.exports = router;
