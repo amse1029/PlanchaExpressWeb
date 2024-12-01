@@ -60,7 +60,12 @@
         // Función para cerrar sesión
         function cerrarSesion() {
             localStorage.removeItem('jwtToken');
-            alert('Sesión cerrada.');
+            Swal.fire({
+                    title: "Sesión cerrada",
+                    text: "Sesión cerrada exitosamente.",
+                    icon: "success",
+                    confirmButtonText: "Entendido"
+                });
             window.location.href = 'inicioSesion.html';
         }
     </script>

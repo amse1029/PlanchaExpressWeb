@@ -6,6 +6,7 @@
     <title>Consultar Nota de Remisión</title>
     <link rel="stylesheet" href="../css/estilos.css">
     <script defer src="../NavBarComponent/navbar1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Decodificar el token JWT
         function parseJwt(token) {
@@ -45,12 +46,22 @@
             // Validar rol del usuario
             if (decodedToken.role === "admin") {
                 // Redirigir al panel de administración si el rol es administrador
-                alert('Esta página es solo para clientes. Redirigiendo...');
+                Swal.fire({
+                    title: "Página no autorizada",
+                    text: "Esta página es solo para administradores.",
+                    icon: "warning",
+                    confirmButtonText: "Entendido"
+                });
                 window.location.href = 'index2.html';
                 return;
             } else if (decodedToken.role !== "client") {
                 // Si el rol no es cliente, redirigir al inicio de sesión
-                alert('Rol desconocido. Por favor, inicia sesión nuevamente.');
+                Swal.fire({
+                    title: "Rol desconocido",
+                    text: "Rol desconocido.",
+                    icon: "error",
+                    confirmButtonText: "Entendido"
+                });
                 localStorage.removeItem('jwtToken');
                 window.location.href = 'inicioSesion.html';
                 return;
@@ -63,7 +74,12 @@
         // Función para cerrar sesión
         function cerrarSesion() {
             localStorage.removeItem('jwtToken');
-            alert('Sesión cerrada.');
+            Swal.fire({
+                    title: "Sesión cerrada",
+                    text: "Sesión cerrada exitosamente.",
+                    icon: "success",
+                    confirmButtonText: "Entendido"
+                });
             window.location.href = 'inicioSesion.html';
         }
 
@@ -74,11 +90,21 @@
             const idCliente = document.getElementById("idCliente").value; // Obtener el idCliente del campo oculto
             
             if (!folio) {
-                alert("Por favor, completa todos los campos.");
+                Swal.fire({
+                    title: "Completar campos",
+                    text: "Favor de ingresar el folio.",
+                    icon: "warning",
+                    confirmButtonText: "Entendido"
+                });
                 return;
             }
             if(!idCliente){
-                alert("No seas mamon");
+                Swal.fire({
+                    title: "Completar campos",
+                    text: "Favor de ingresar el ID del cliente.",
+                    icon: "warning",
+                    confirmButtonText: "Entendido"
+                });
                 return;
             }
 
@@ -102,7 +128,12 @@
                 }
             } catch (error) {
                 console.error("Error:", error);
-                alert("No se pudo conectar con el servidor.");
+                Swal.fire({
+                    title: "Error en el servidor",
+                    text: "No se pudo conectar al servidor.",
+                    icon: "error",
+                    confirmButtonText: "Entendido"
+                });
             }
         }
     </script>

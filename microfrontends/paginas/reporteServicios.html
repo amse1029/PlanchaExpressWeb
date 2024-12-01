@@ -85,7 +85,12 @@
 
             const decodedToken = parseJwt(token);
             if (!decodedToken || decodedToken.role !== "admin") {
-                alert('Acceso denegado. Redirigiendo...');
+                Swal.fire({
+                    title: "Acceso denegado",
+                    text: "Acceso denegado. Reporte solo para administradores.",
+                    icon: "warning",
+                    confirmButtonText: "Entendido"
+                });
                 window.location.href = 'inicioSesion.html';
                 return;
             }
@@ -95,7 +100,12 @@
                 .then(data => renderizarReporte(data))
                 .catch(error => {
                     console.error('Error al obtener el reporte:', error);
-                    alert('Error al obtener el reporte de servicios.');
+                    Swal.fire({
+                    title: "Error",
+                    text: "Error al obtener el reporte.",
+                    icon: "error",
+                    confirmButtonText: "Entendido"
+                });
                 });
         }
 
@@ -105,7 +115,12 @@
 
         function cerrarSesion() {
             localStorage.removeItem('jwtToken');
-            alert('Sesión cerrada.');
+            Swal.fire({
+                    title: "Sesión cerrada",
+                    text: "Sesión cerrada exitosamente.",
+                    icon: "success",
+                    confirmButtonText: "Entendido"
+                });
             window.location.href = 'inicioSesion.html';
         }
     </script>

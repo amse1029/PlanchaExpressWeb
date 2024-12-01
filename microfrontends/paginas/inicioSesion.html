@@ -7,6 +7,7 @@
     <title>Inicio de Sesión</title>
     <link rel="stylesheet" href="../css/estilos.css">
     <script defer src="../NavBarComponent/navbar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -63,12 +64,21 @@
                 }
                 else {
                     // Muestra el mensaje de error
-                    alert(data.error || 'Credenciales incorrectas');
+                    Swal.fire({
+                    title: "Credenciales incorrectas",
+                    text: "Usuario no encontrado. Favor de intentar nuevamente.",
+                    icon: "error",
+                    confirmButtonText: "Entendido"
+                });
                 }
             } catch (error) {
                 console.log(error);
-                console.error('Error al iniciar sesión:', error);
-                alert('Error al conectar con el servidor');
+                Swal.fire({
+                    title: "Error",
+                    text: "Error al iniciar sesión.",
+                    icon: "error",
+                    confirmButtonText: "Entendido"
+                });
             }
         });
 
