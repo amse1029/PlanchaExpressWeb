@@ -94,7 +94,7 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Quejas:', data);
+                //console.log('Quejas:', data);
                 const quejasList = document.getElementById('quejasList');
                 quejasList.style.display = 'block';  // Muestra la lista de quejas
                 document.getElementById('loading').style.display = 'none'; // Oculta el mensaje de carga

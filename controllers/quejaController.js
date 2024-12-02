@@ -2,7 +2,6 @@ const quejaDAO = new (require('../dao/QuejaDAO'))();
 
 exports.listarQuejas = (req, res) => {
     quejaDAO.getAllQuejas((quejas) => {
-        console.log('Quejas obtenidas:', quejas);
         res.json(quejas);
     });
 };
