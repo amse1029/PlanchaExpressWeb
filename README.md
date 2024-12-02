@@ -1,3 +1,4 @@
+# Script SQL
 Antes de correr la aplicación, ejecuta el siguiente script SQL para crear las tablas necesarias:
 
 -- Tabla Administrador
