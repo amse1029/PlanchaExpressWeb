@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,11 +76,11 @@
         function cerrarSesion() {
             localStorage.removeItem('jwtToken');
             Swal.fire({
-                    title: "Sesión cerrada",
-                    text: "Sesión cerrada exitosamente.",
-                    icon: "success",
-                    confirmButtonText: "Entendido"
-                });
+                title: "Sesión cerrada",
+                text: "Sesión cerrada exitosamente.",
+                icon: "success",
+                confirmButtonText: "Entendido"
+            });
             window.location.href = 'inicioSesion.html';
         }
 
@@ -88,7 +89,7 @@
 
             const folio = document.getElementById("folio").value;
             const idCliente = document.getElementById("idCliente").value; // Obtener el idCliente del campo oculto
-            
+
             if (!folio) {
                 Swal.fire({
                     title: "Completar campos",
@@ -98,7 +99,7 @@
                 });
                 return;
             }
-            if(!idCliente){
+            if (!idCliente) {
                 Swal.fire({
                     title: "Completar campos",
                     text: "Favor de ingresar el ID del cliente.",
@@ -124,10 +125,18 @@
                     const params = new URLSearchParams(data).toString();
                     window.location.href = `estadoNota.html?folio=${folio}`;
                 } else {
-                    alert(data.message || "Error al consultar la nota.");
+                    // Mostrar mensaje de error
+                    Swal.fire({
+                        title: "Error al consultar la nota",
+                        text: data.message || "Error al consultar la nota.",
+                        icon: "error",
+                        confirmButtonText: "Aceptar"
+                    });
                 }
+
             } catch (error) {
                 console.error("Error:", error);
+                // Mostrar error de conexión con el servidor
                 Swal.fire({
                     title: "Error en el servidor",
                     text: "No se pudo conectar al servidor.",
@@ -135,6 +144,7 @@
                     confirmButtonText: "Entendido"
                 });
             }
+
         }
     </script>
 </head>

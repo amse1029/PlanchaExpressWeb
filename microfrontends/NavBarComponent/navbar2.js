@@ -27,8 +27,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Definir la función cerrarSesion globalmente
     function cerrarSesion() {
-    localStorage.removeItem('jwtToken');
-    alert('Sesión cerrada.');
-    window.location.href = '../Paginas/index.html';
+    Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Se cerrará la sesión.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, cerrar sesión",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('jwtToken');
+            window.location.href = 'inicioSesion.html';
+        }
+    });
+ 
 }
 

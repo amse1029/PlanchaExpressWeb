@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido de Nuevo</title>
     <link rel="stylesheet" href="../css/estilos.css">
     <script defer src="../NavBarComponent/navbar2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Decodificar el token JWT
         function parseJwt(token) {
@@ -31,27 +33,47 @@
 
             // Decodificar el token
             const decodedToken = parseJwt(token);
+
             if (!decodedToken) {
                 // Token inválido o expirado
-                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
-                localStorage.removeItem('jwtToken');
-                window.location.href = 'inicioSesion.html';
+                Swal.fire({
+                    title: 'Sesión expirada',
+                    text: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    localStorage.removeItem('jwtToken');
+                    window.location.href = 'inicioSesion.html';
+                });
                 return;
             }
 
             // Validar rol del usuario
             if (decodedToken.role === "client") {
-                // Redirigir al panel de administración si el rol es administrador
-                alert('Esta página es solo para administradores. Redirigiendo...');
-                window.location.href = 'index1.html';
+                // Mensaje si el usuario es cliente
+                Swal.fire({
+                    title: 'Acceso denegado',
+                    text: 'Esta página es solo para administradores. Redirigiendo...',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    window.location.href = 'index1.html';
+                });
                 return;
             } else if (decodedToken.role !== "admin") {
-                // Si el rol no es cliente, redirigir al inicio de sesión
-                alert('Rol desconocido. Por favor, inicia sesión nuevamente.');
-                localStorage.removeItem('jwtToken');
-                window.location.href = 'inicioSesion.html';
+                // Mensaje para rol desconocido
+                Swal.fire({
+                    title: 'Rol desconocido',
+                    text: 'Por favor, inicia sesión nuevamente.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    localStorage.removeItem('jwtToken');
+                    window.location.href = 'inicioSesion.html';
+                });
                 return;
             }
+
 
             // Mostrar el nombre del usuario en la página (campo opcional)
             document.getElementById('userName').textContent = decodedToken.nombre || 'Usuario desconocido';
@@ -59,30 +81,38 @@
 
         // Función para cerrar sesión
         function cerrarSesion() {
+
             localStorage.removeItem('jwtToken');
             Swal.fire({
-                    title: "Sesión cerrada",
-                    text: "Sesión cerrada exitosamente.",
-                    icon: "success",
-                    confirmButtonText: "Entendido"
-                });
-            window.location.href = 'inicioSesion.html';
+                title: "¿Estás seguro?",
+                text: "Se cerrará la sesión.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sí, cerrar sesión",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'inicioSesion.html';
+                }
+            });
         }
     </script>
 </head>
+
 <body>
     <!-- Ubicación Section -->
     <section class="location-section">
         <h2>Visítanos</h2>
         <p>Estamos ubicados en Matamoros y Galeana N° 35, Avenida Juárez, Colonia Centro, Huatabampo, Sonora.</p>
         <div class="map-container">
-            <iframe 
+            <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.446825344057!2d-109.6405104!3d26.825737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86b78b31edbdf05f%3A0xe695f85f1109950c!2sLavander%C3%ADa%20Plancha%20Express!5e0!3m2!1ses!2smx!4v1732167889010!5m2!1ses!2smx"
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
+                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </div>
     </section>
 </body>
+
 </html>

@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'AlexaSoto1',  // Cambia esto por tu contraseña
+  password: '1234',  // Cambia esto por tu contraseña
   database: 'plancha_express_web'  // Cambia esto por el nombre de tu base de datos
 });
 

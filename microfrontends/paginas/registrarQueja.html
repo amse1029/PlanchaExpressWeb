@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Quejas</title>
     <link rel="stylesheet" href="../css/estilos.css">
     <script defer src="../NavBarComponent/navbar1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         textarea {
             width: 99%;
@@ -14,7 +16,7 @@
         }
     </style>
     <script>
-        
+
 
         // Decodificar el token JWT
         function parseJwt(token) {
@@ -76,11 +78,11 @@
         function cerrarSesion() {
             localStorage.removeItem('jwtToken');
             Swal.fire({
-                    title: "Sesión cerrada",
-                    text: "Sesión cerrada exitosamente.",
-                    icon: "success",
-                    confirmButtonText: "Entendido"
-                });
+                title: "Sesión cerrada",
+                text: "Sesión cerrada exitosamente.",
+                icon: "success",
+                confirmButtonText: "Entendido"
+            });
             window.location.href = 'inicioSesion.html';
         }
 
@@ -106,19 +108,37 @@
 
                 console.log(data);
                 if (response.ok) {
-                    alert('Queja registrada con éxito!');
-                    // Limpiar el formulario
-                    document.getElementById('formQueja').reset();
-                }
-                else {
+                    // Mostrar éxito al registrar la queja
+                    Swal.fire({
+                        title: '¡Éxito!',
+                        text: 'Queja registrada con éxito.',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar'
+                    }).then(() => {
+                        // Limpiar el formulario
+                        document.getElementById('formQueja').reset();
+                    });
+                } else {
                     // Muestra el mensaje de error
-                    alert(data.error || 'Error al registrar la queja');
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.error || 'Error al registrar la queja.',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
                 }
+
             } catch (error) {
-                console.log(error);
                 console.error('Error al enviar la queja:', error);
-                alert('Error al conectar con el servidor');
+                // Mostrar error de conexión con el servidor
+                Swal.fire({
+                    title: 'Error de conexión',
+                    text: 'Error al conectar con el servidor.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
             }
+
         }
     </script>
 </head>
