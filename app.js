@@ -53,6 +53,7 @@ app.use('/api/v1', loginRoutes); // Ruta de autenticación
 app.use('/css', express.static(path.join(__dirname, 'microfrontends', 'css'))); // Sirve CSS
 app.use('/paginas', express.static(path.join(__dirname, 'microfrontends', 'paginas'))); // Sirve páginas HTML
 app.use('/NavBarComponent', express.static(path.join(__dirname, 'microfrontends', 'NavBarComponent')));
+app.use('/WebComponents', express.static(path.join(__dirname, 'microfrontends', 'WebComponents')));
 app.use('/img', express.static(path.join(__dirname, 'microfrontends', 'img')));
 
 // Redirige a index.html al visitar `/`

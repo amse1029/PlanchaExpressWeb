@@ -15,10 +15,10 @@ exports.agregarQueja = (req, res) => {
     }
 
     // Validar formato de mensaje
-    const mensajeRegex = /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ.,!?¿'" ]{5,500}$/;
+    const mensajeRegex = /^[A-Za-z0-9áéíóúÁÉÍÓÚñÑ.,!?¿'" ]{5,100}$/;
     if (!mensajeRegex.test(mensaje)) {
         return res.status(400).json({ 
-            error: "El mensaje debe contener entre 5 y 500 caracteres, y solo puede incluir letras, números y puntuación básica."
+            error: "El mensaje debe contener entre 5 y 100 caracteres, y solo puede incluir letras, números y puntuación básica."
         });
     }
 
